@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                         for(VisitorLocation visitor : visitorLocations) {
                             if (visitor.getLat() == null || visitor.getLon() == null || visitor.getTimestamp() == null) continue; // DLACZEGO TE NULLE
 
+                            myLayer.remove(visitor.getVisitorUuid());
+
                             if (new Date().getTime() - visitor.getTimestamp().getTime() > 10000) continue; // za stare
 
                             Log.i("ASDDSFDSFSFS", visitor.toString());
