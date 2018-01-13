@@ -2,4 +2,6 @@
     <string name="app_name">CampusAssistant</string>
     <string name="user_session_key">net.elfdump.campusassistant.USER_SESSION_KEY</string>
     <string name="user_uuid">USER_UUID</string>
+    <string name="no_information">brak danych</string>
+    <string name="amount_of_people">Ilość osób</string>
 </resources>

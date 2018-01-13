@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.TextView;
 
 import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
@@ -200,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     }
 
                     selectedObject = parameters.getId();
+                    updateRoomDetails();
                     if (currentPosition != null) {
                         mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
                     }
@@ -215,5 +217,15 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     mLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
                 }
             });
+    }
+
+    public void updateRoomDetails() {
+        TextView peopleAmount = findViewById(R.id.usersAmount);
+        if (peopleCount.containsKey(selectedObject)) {
+            int amount = peopleCount.get(selectedObject);
+            peopleAmount.setText(String.valueOf(amount));
+        } else {
+            peopleAmount.setText(R.string.no_information);
+        }
     }
 }

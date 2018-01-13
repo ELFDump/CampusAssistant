@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="ILOŚĆ OSÓB"
+                        android:text="@string/amount_of_people"
                         android:textColor="@color/windowBackground"
                         android:textStyle="bold" />
 
@@ -90,7 +90,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="16sp"
                         android:layout_weight="1"
-                        android:text="12"
+                        android:text="@string/no_information"
                         android:textColor="@color/windowBackground"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -122,7 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="16sp"
                     android:layout_weight="1"
-                    android:text="12 min 30 s"
+                    android:text="brak danych"
                     android:textAlignment="textEnd"
                     android:textColor="@color/windowBackground"
                     android:textSize="16sp" />
