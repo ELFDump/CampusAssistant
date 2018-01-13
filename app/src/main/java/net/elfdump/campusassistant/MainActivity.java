@@ -3,6 +3,7 @@ package net.elfdump.campusassistant;
 import android.graphics.Color;
 import android.os.Debug;
 import android.os.Handler;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,16 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        IndoorwayMapFragment.Config config = new IndoorwayMapFragment.Config();
+        config.setLocationButtonVisible(true);
+        config.setStartPositioningOnResume(true);
+        config.setLoadLastKnownMap(true);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        IndoorwayMapFragment fragment = IndoorwayMapFragment.newInstance(this, config);
+        fragmentTransaction.add(R.id.fragment_container, fragment, IndoorwayMapFragment.class.getSimpleName());
+        fragmentTransaction.commit();
     }
 
     private final Runnable mUpdateUI = new Runnable() {

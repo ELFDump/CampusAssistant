@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.model.Visitor;
+import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
+import com.indoorway.android.location.sdk.background.StandardBackgroundNotificationBuilder;
 
 public class MyApplication extends Application {
     @Override
@@ -21,5 +23,14 @@ public class MyApplication extends Application {
         visitor.setShareLocation(true);
         IndoorwaySdk.instance().visitor().setup(visitor);
         Log.i("APPPPPPPP", "App started");
+
+        StandardBackgroundNotificationBuilder notificationBuilder = new StandardBackgroundNotificationBuilder(
+            "channel-id",
+            "channel-name",
+            "title",
+            "description",
+            R.drawable.ic_launcher_foreground
+        );
+        IndoorwayLocationSdk.background().enable(notificationBuilder);
     }
 }
