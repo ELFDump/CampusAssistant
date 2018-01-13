@@ -120,7 +120,7 @@ public class MyApplication extends Application {
                                         IndoorwayObjectParameters roomParams = indoorwayMap.objectWithId(room);
                                         if (roomParams == null) {
                                             // Probably on a different floor
-                                            return;
+                                            continue;
                                         }
 
                                         // ... register the proximity events
