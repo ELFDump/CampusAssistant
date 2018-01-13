@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 originalRoom = parameters;
             }
 
-            if (parameters.getId().equals(roomId+"Overlay")) {
+            if (parameters.getId().equals(roomId+"Overlay")) { //TODO: ???
                 myLayer.remove(roomId+"Overlay");
             }
         }

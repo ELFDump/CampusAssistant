@@ -75,7 +75,7 @@ public class MyApplication extends Application {
             restEvent.setUserId(Preferences.getUserUUID(MyApplication.this));
             restEvent.setPlaceId(roomId);
             restEvent.setAction(trigger == IndoorwayProximityEvent.Trigger.ENTER ? UserPlaceEvent.PlaceAction.ENTER : UserPlaceEvent.PlaceAction.LEAVE);
-            restEvent.setTime(new Date().getTime());
+            restEvent.setTimeInMilliseconds(new Date().getTime());
             new SendUserPlaceEvent().execute(restEvent);
         }
     };
