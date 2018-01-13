@@ -1,11 +1,19 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    maven { url 'https://repository.indoorway.com/artifactory/android' }
+}
+
+ext {
+    indoorway_version = "2.0.4"
+}
+
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "net.elfdump.campusassistant"
         minSdkVersion 18
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -20,9 +28,20 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    // required for map and location modules
+    compile "com.indoorway.android:common:$indoorway_version"
+    // optional if you don't want to use map view
+    compile "com.indoorway.android:map:$indoorway_version"
+    // optional if you don't want to use indoor positioning
+    compile "com.indoorway.android:location:$indoorway_version"
+    // optional if you don't want to use qr codes
+    compile "com.indoorway.android:qrcode:$indoorway_version"
+    // optional if you don't want to use fragments
+    compile "com.indoorway.android:fragments:$indoorway_version"
 }
