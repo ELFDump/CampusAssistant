@@ -3,4 +3,5 @@
     <color name="colorPrimary">#00a699</color>
     <color name="colorPrimaryDark">#00514a</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="indoorway_map_selected_room_background">#00000000</color>
 </resources>

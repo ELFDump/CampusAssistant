@@ -23,6 +23,8 @@ import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.map.sdk.listeners.OnObjectSelectedListener;
 import com.indoorway.android.map.sdk.view.IndoorwayMapView;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle;
+import com.indoorway.android.map.sdk.view.drawable.figures.DrawablePolygon;
+import com.indoorway.android.map.sdk.view.drawable.figures.DrawableText;
 import com.indoorway.android.map.sdk.view.drawable.layers.MarkersLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -190,8 +192,19 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         public void run() {
             try {
                 peopleCount = MyApplication.getRestClient().location().getPeopleCount().execute().body();
+
+                if (mapFragment.getCurrentMap() == null) {
+                    return;
+                }
+
                 for(String room : peopleCount.keySet()) {
                     Log.i(IndoorwayConstants.LOG_TAG, "Room "+room+": "+peopleCount.get(room));
+
+                    int green = Color.argb(60, 0, 255, 0);
+                    int red = Color.argb(60, 255, 0, 0);
+
+                    int amount = peopleCount.get(room);
+                    setRoomColor(room, (amount > 1 ? red : green));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -205,15 +218,9 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         mapFragment.getMapView().setOnMapLoadCompletedListener(new Action1<IndoorwayMap>() {
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
-                myLayer = mapFragment.getMapView().getMarker().addLayer(100.0f);
+                myLayer = mapFragment.getMapView().getMarker().addLayer(1.0f);
             }
         });
-
-        /*IndoorwayMapView map = (IndoorwayMapView)((MapViewDelegate) mapFragment.getMapView()).getOriginalMapView();
-        Hack.setFinal(map, "mapViewConfig", new CustomMapViewConfig(this));
-        map.getDisplay().invalidate();
-
-        Hack.logField(map, "mapViewConfig");*/
 
         mapFragment.getMapView().getSelection()
             .setOnObjectSelectedListener(new OnObjectSelectedListener() {
@@ -245,6 +252,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     if (currentPosition != null) {
                         mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
                     }
+
+//                    setRoomColor(selectedObject, red);
                 }
 
                 @Override
@@ -267,5 +276,23 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         } else {
             peopleAmount.setText(R.string.no_information);
         }
+    }
+
+    public void setRoomColor(String roomId, int color) {
+        IndoorwayObjectParameters originalRoom = null;
+        for (IndoorwayObjectParameters parameters : mapFragment.getCurrentMap().getObjects()) {
+            if (parameters.getId().equals(roomId)) {
+                originalRoom = parameters;
+            }
+
+            if (parameters.getId().equals(roomId+"Overlay")) {
+                myLayer.remove(roomId+"Overlay");
+            }
+        }
+
+        if (originalRoom != null) {
+            myLayer.add(new DrawablePolygon(roomId+"Overlay", originalRoom.getCoordinates(), color));
+        }
+
     }
 }
