@@ -30,6 +30,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements IndoorwayMapFragment.OnMapFragmentReadyListener {
     private final Handler mHandler = new Handler();
     private MapFragment mapFragment;
+    private MarkersLayer myLayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +46,9 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 .setOnCompletedListener(new Action1<List<VisitorLocation>>() {
                     @Override
                     public void onAction(List<VisitorLocation> visitorLocations) {
-                        MarkersLayer myLayer = mapFragment.getMapView().getMarker().addLayer(100.0f);
-
                         Log.i("DDFSFSDF", "WORKING");
                         for(VisitorLocation visitor : visitorLocations) {
                             if (visitor.getLat() == null || visitor.getLon() == null || visitor.getTimestamp() == null) continue; // DLACZEGO TE NULLE
-
-                            myLayer.remove(visitor.getVisitorUuid());
 
                             if (new Date().getTime() - visitor.getTimestamp().getTime() > 10000) continue; // za stare
 
@@ -89,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         mapFragment.getMapView().setOnMapLoadCompletedListener(new Action1<IndoorwayMap>() {
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
+                myLayer = MainActivity.this.mapFragment.getMapView().getMarker().addLayer(100.0f);
+
                 mHandler.post(mUpdateUI);
             }
         });
