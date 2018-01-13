@@ -1,8 +1,15 @@
 package net.elfdump.campusassistant;
 
-class MapViewConfig extends MapViewConfig {
+import android.content.Context;
 
-    public MyMapViewConfig(@NotNull Context applicationContext) {
+import com.indoorway.android.common.sdk.model.IndoorwayObjectParameters;
+import com.indoorway.android.map.sdk.config.MapViewConfig;
+
+import org.jetbrains.annotations.NotNull;
+
+class CustomMapViewConfig extends MapViewConfig {
+
+    public CustomMapViewConfig(@NotNull Context applicationContext) {
         super(applicationContext);
     }
 
@@ -10,7 +17,7 @@ class MapViewConfig extends MapViewConfig {
 
     @Override
     public int getRoomBackgroundColor(@NotNull IndoorwayObjectParameters obj) {
-        return getApplicationContext().getResources().getColor(R.color.colorAccent);
+        return getApplicationContext().getResources().getColor(R.color.white);
     }
 
     @Override
