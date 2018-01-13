@@ -4,6 +4,7 @@ import net.elfdump.campusassistant.api.service.LocationService;
 import net.elfdump.campusassistant.api.service.UserService;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestClient {
 
@@ -13,6 +14,7 @@ public class RestClient {
     public RestClient() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
