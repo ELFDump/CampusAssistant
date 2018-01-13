@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 
 public class RestClient {
 
-    private static final String baseUrl = "http://192.168.100.79/campus-assistant-api/public_html";
+    private static final String baseUrl = "http://192.168.100.79/campus-assistant-api/public_html/";
     private Retrofit retrofit;
 
     public RestClient() {
