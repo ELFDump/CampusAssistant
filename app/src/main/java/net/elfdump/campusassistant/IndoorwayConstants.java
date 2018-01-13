@@ -12,5 +12,5 @@ public final class IndoorwayConstants {
 
     public static final String[] SELECTABLE_ROOMS = {ROOM_213_UUID, ROOM_216_UUID};
 
-    public static final String LOG_TAG = "CampusAsssistant";
+    public static final String LOG_TAG = "CampusAssistant";
 }
