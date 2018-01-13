@@ -19,10 +19,12 @@ import com.indoorway.android.common.sdk.model.IndoorwayObjectParameters;
 import com.indoorway.android.common.sdk.model.IndoorwayPosition;
 import com.indoorway.android.common.sdk.model.VisitorLocation;
 import com.indoorway.android.common.sdk.task.IndoorwayTask;
+import com.indoorway.android.fragments.map.MapViewDelegate;
 import com.indoorway.android.fragments.sdk.map.IndoorwayMapFragment;
 import com.indoorway.android.fragments.sdk.map.MapFragment;
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.map.sdk.listeners.OnObjectSelectedListener;
+import com.indoorway.android.map.sdk.view.IndoorwayMapView;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle;
 import com.indoorway.android.map.sdk.view.drawable.layers.MarkersLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -30,6 +32,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -175,6 +178,18 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 myLayer = mapFragment.getMapView().getMarker().addLayer(100.0f);
             }
         });
+
+        try {
+            Field f2 = getClass().getDeclaredField("a");
+            Log.i("XDXDXDXDXDXDXD", String.valueOf(f2.getModifiers()));
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        IndoorwayMapView map = (IndoorwayMapView)((MapViewDelegate) mapFragment.getMapView()).getOriginalMapView();
+        Hack.setFinal(map, "mapViewConfig", new CustomMapViewConfig(this));
+        map.getDisplay().invalidate();
+
         mapFragment.getMapView().getSelection()
             .setOnObjectSelectedListener(new OnObjectSelectedListener() {
                 @Override
