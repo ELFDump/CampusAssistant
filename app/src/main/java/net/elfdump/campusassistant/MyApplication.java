@@ -1,6 +1,14 @@
 package net.elfdump.campusassistant;
 
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +33,16 @@ public class MyApplication extends Application {
             // track conversion using proximityEvent.getUuid()
             Log.w(IndoorwayConstants.LOG_TAG, proximityEvent.toString());
             Toast.makeText(MyApplication.this, proximityEvent.toString(), Toast.LENGTH_LONG).show();
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(MyApplication.this);
+            builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground));
+            builder.setContentTitle("snfojdsfjnds");
+            builder.setContentText(proximityEvent.toString());
+            builder.setSubText(proximityEvent.toString());
+            NotificationManager notificationManager = (NotificationManager) getSystemService(
+                NOTIFICATION_SERVICE);
+            notificationManager.notify(1234, builder.build());
         }
     };
 
@@ -66,32 +84,25 @@ public class MyApplication extends Application {
                         Log.i(IndoorwayConstants.LOG_TAG, obj.getId()+";"+obj.getName()+";"+obj.getType()+";"+obj.getCenterPoint().toString());
                     }
 
+                    IndoorwayObjectParameters room216 = indoorwayMap.objectWithId(IndoorwayConstants.ROOM_216_UUID);
+                    assert room216 != null;
+
                     IndoorwayLocationSdk.instance().customProximityEvents()
                         .add(new IndoorwayProximityEvent(
-                            "proximity-event-id-enter", // identifier
-                            IndoorwayProximityEvent.Trigger.ENTER, // trigger on enter or on exit?
-                            new IndoorwayProximityEventShape.Circle(
-                                indoorwayMap.objectWithId(IndoorwayConstants.ROOM_216_UUID).getCenterPoint(),
-                                5.0
-                            ),
+                            "proximity-event-id-enter",
+                            IndoorwayProximityEvent.Trigger.ENTER,
+                            new IndoorwayProximityEventShape.Polygon(room216.getCoordinates()),
                             IndoorwayConstants.BUILDING_UUID,
-                            IndoorwayConstants.FLOOR2_UUID,
-                            0L,
-                            new IndoorwayNotificationInfo("title", "description", "url", "image")
+                            IndoorwayConstants.FLOOR2_UUID
                         ));
 
                     IndoorwayLocationSdk.instance().customProximityEvents()
                         .add(new IndoorwayProximityEvent(
-                            "proximity-event-id-exit", // identifier
-                            IndoorwayProximityEvent.Trigger.EXIT, // trigger on enter or on exit?
-                            new IndoorwayProximityEventShape.Circle(
-                                indoorwayMap.objectWithId(IndoorwayConstants.ROOM_216_UUID).getCenterPoint(),
-                                5.0
-                            ),
+                            "proximity-event-id-exit",
+                            IndoorwayProximityEvent.Trigger.EXIT,
+                            new IndoorwayProximityEventShape.Polygon(room216.getCoordinates()),
                             IndoorwayConstants.BUILDING_UUID,
-                            IndoorwayConstants.FLOOR2_UUID,
-                            0L,
-                            new IndoorwayNotificationInfo("title", "description", "url", "image")
+                            IndoorwayConstants.FLOOR2_UUID
                         ));
                 }
             })
