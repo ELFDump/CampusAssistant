@@ -31,7 +31,7 @@
 
 
             <TextView
-                android:id="@+id/name2"
+                android:id="@+id/notification"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -76,7 +76,7 @@
                     android:paddingLeft="10dp">
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/usersAmoutText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -86,7 +86,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/name"
+                        android:id="@+id/usersAmount"
                         android:layout_width="match_parent"
                         android:layout_height="16sp"
                         android:layout_weight="1"
@@ -107,7 +107,7 @@
                 android:paddingRight="10dp">
 
                 <TextView
-                    android:id="@+id/textView32"
+                    android:id="@+id/averageTimeText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -118,7 +118,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/name32"
+                    android:id="@+id/averageTime"
                     android:layout_width="match_parent"
                     android:layout_height="16sp"
                     android:layout_weight="1"
