@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 
 public interface UserService {
 
-    @POST("users/new")
+    @POST("users/create")
     Call<User> create(@Body User user);
 
 }
