@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     @Override
     public void onMapFragmentReady(@NotNull MapFragment mapFragment) {
         this.mapFragment = mapFragment;
-        mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR2_UUID);
+        //mapFragment.getMapView().load(IndoorwayConstants.BUIDING_UUID, IndoorwayConstants.FLOOR2_UUID);
         mapFragment.getMapView().setOnMapLoadCompletedListener(new Action1<IndoorwayMap>() {
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
