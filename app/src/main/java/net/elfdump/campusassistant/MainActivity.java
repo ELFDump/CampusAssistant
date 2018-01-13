@@ -12,12 +12,15 @@ import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
 import com.indoorway.android.common.sdk.model.Coordinates;
 import com.indoorway.android.common.sdk.model.IndoorwayMap;
+import com.indoorway.android.common.sdk.model.IndoorwayObjectParameters;
 import com.indoorway.android.common.sdk.model.IndoorwayPoiType;
+import com.indoorway.android.common.sdk.model.IndoorwayPosition;
 import com.indoorway.android.common.sdk.model.Visitor;
 import com.indoorway.android.common.sdk.model.VisitorLocation;
 import com.indoorway.android.common.sdk.task.IndoorwayTask;
 import com.indoorway.android.fragments.sdk.map.IndoorwayMapFragment;
 import com.indoorway.android.fragments.sdk.map.MapFragment;
+import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableIcon;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableText;
@@ -33,6 +36,19 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     private MapFragment mapFragment;
     private MarkersLayer myLayer;
 
+    private IndoorwayPosition currentPosition;
+
+    Action1<IndoorwayPosition> listener = new Action1<IndoorwayPosition>() {
+        @Override
+        public void onAction(IndoorwayPosition position) {
+            // store last position as a field
+            currentPosition = position;
+
+            // react for position changes...
+            mapFragment.getMapView().getNavigation().start(currentPosition, "3-_M01M3r5w_ca808"); // Room 216
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +63,12 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         IndoorwayMapFragment fragment = IndoorwayMapFragment.newInstance(this, config);
         fragmentTransaction.add(R.id.fragment_container, fragment, IndoorwayMapFragment.class.getSimpleName());
         fragmentTransaction.commit();
+
+        // TODO: Unregister
+        IndoorwayLocationSdk.instance()
+            .position()
+            .onChange()
+            .register(listener);
     }
 
     private final Runnable mUpdateUI = new Runnable() {
@@ -100,6 +122,10 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
                 myLayer = MainActivity.this.mapFragment.getMapView().getMarker().addLayer(100.0f);
+
+                for(IndoorwayObjectParameters obj : indoorwayMap.getObjects()) {
+                    Log.i("FDSfsdfsfdsf", obj.getId()+";"+obj.getName()+";"+obj.getType()+";"+obj.getCenterPoint().toString());
+                }
 
                 mHandler.post(mUpdateUI);
             }
