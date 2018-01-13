@@ -1,8 +1,13 @@
 package net.elfdump.campusassistant;
 
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,26 +28,29 @@ import com.indoorway.android.location.sdk.listeners.OnProximityEventListener;
 import java.util.List;
 
 public class MyApplication extends Application {
+    private static final String RUNNING_NOTIFICATION_CHANNEL_ID = "CampusAssistant-running";
+    private static final String NOTIFICATION_CHANNEL_ID = "CampusAssistant-notification";
+    private static final int ENTRY_EXIT_NOTIFICATION_ID = 1234;
+
     OnProximityEventListener proximityEventListener = new OnProximityEventListener() {
         @Override
         public void onEvent(IndoorwayProximityEvent proximityEvent, IndoorwayProximityEvent.Source source) {
-            // show notification using event title, description, url etc.
-            // track conversion using proximityEvent.getUuid()
             Log.w(IndoorwayConstants.LOG_TAG, proximityEvent.toString());
             Toast.makeText(MyApplication.this, proximityEvent.toString(), Toast.LENGTH_LONG).show();
 
             IndoorwayProximityEvent.Trigger trigger = proximityEvent.getTrigger();
             String roomId = proximityEvent.getIdentifier().split("\\+")[0];
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(MyApplication.this);
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground);
-            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground));
-            builder.setContentTitle("Proximity event triggered!");
-            builder.setContentText(proximityEvent.toString());
-            builder.setSubText(roomId+" "+trigger.toString());
+            Notification notification = new NotificationCompat.Builder(MyApplication.this)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Proximity event triggered!")
+                .setContentText(roomId + " " + trigger.toString())
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(proximityEvent.toString()))
+                .setChannelId(NOTIFICATION_CHANNEL_ID)
+                .build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(
                 NOTIFICATION_SERVICE);
-            notificationManager.notify(1234, builder.build());
+            notificationManager.notify(ENTRY_EXIT_NOTIFICATION_ID, notification);
         }
     };
 
@@ -62,8 +70,21 @@ public class MyApplication extends Application {
         IndoorwaySdk.instance().visitor().setup(visitor);
         Log.i(IndoorwayConstants.LOG_TAG, "App started, visitor: " + visitor.toString());
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "CampusAssistant: notifications", NotificationManager.IMPORTANCE_HIGH); // TODO: wysoka dla testów
+            channel.setDescription("Powiadomienia o wchodzeniu/wychodzeniu [DEBUG]");
+            channel.enableLights(true);
+            channel.setLightColor(Color.RED);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{ 100, 100, 100, 100, 100, 500 });
+            notificationManager.createNotificationChannel(channel);
+        }
+
         StandardBackgroundNotificationBuilder notificationBuilder = new StandardBackgroundNotificationBuilder(
-            "CampusAssistant-running",
+            RUNNING_NOTIFICATION_CHANNEL_ID,
             "CampusAssistant: running",
             "CampusAssistant",
             "CampusAssistant is running!",
@@ -80,7 +101,7 @@ public class MyApplication extends Application {
             .setOnCompletedListener(new Action1<List<IndoorwayObjectId>>() {
                 @Override
                 public void onAction(List<IndoorwayObjectId> floors) {
-                    for(final IndoorwayObjectId floor : floors) {
+                    for (final IndoorwayObjectId floor : floors) {
                         // ... retrieve the map ...
                         IndoorwaySdk.instance()
                             .map()
@@ -88,7 +109,7 @@ public class MyApplication extends Application {
                             .setOnCompletedListener(new Action1<IndoorwayMap>() {
                                 @Override
                                 public void onAction(IndoorwayMap indoorwayMap) {
-                                    Log.i(IndoorwayConstants.LOG_TAG, "Mamy mapę dla "+floor.getName());
+                                    Log.i(IndoorwayConstants.LOG_TAG, "Mamy mapę dla " + floor.getName());
 
                                     for (IndoorwayObjectParameters obj : indoorwayMap.getObjects()) {
                                         Log.i(IndoorwayConstants.LOG_TAG, obj.getId() + ";" + obj.getName() + ";" + obj.getType() + ";" + obj.getCenterPoint().toString());
@@ -106,7 +127,7 @@ public class MyApplication extends Application {
 
                                         IndoorwayLocationSdk.instance().customProximityEvents()
                                             .add(new IndoorwayProximityEvent(
-                                                room+"+enter",
+                                                room + "+enter",
                                                 IndoorwayProximityEvent.Trigger.ENTER,
                                                 new IndoorwayProximityEventShape.Polygon(roomParams.getCoordinates()),
                                                 IndoorwayConstants.BUILDING_UUID,
@@ -115,7 +136,7 @@ public class MyApplication extends Application {
 
                                         IndoorwayLocationSdk.instance().customProximityEvents()
                                             .add(new IndoorwayProximityEvent(
-                                                room+"+exit",
+                                                room + "+exit",
                                                 IndoorwayProximityEvent.Trigger.EXIT,
                                                 new IndoorwayProximityEventShape.Polygon(roomParams.getCoordinates()),
                                                 IndoorwayConstants.BUILDING_UUID,
