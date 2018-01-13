@@ -17,16 +17,21 @@ public class Hack {
             Field field = owner.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
 
-//
-//            field.set(owner, value);
-
-//            int modifiers = field.getModifiers();
             Field modifierField = field.getClass().getDeclaredField("accessFlags");
-//            modifiers = modifiers & ~Modifier.FINAL;
             modifierField.setAccessible(true);
-            modifierField.setInt(field, 2);
 
             field.set(owner, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void logField(Object owner, String fieldName)
+    {
+        try {
+            Field field = owner.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Log.e("dfnojfjsnfoj", field.get(owner).toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

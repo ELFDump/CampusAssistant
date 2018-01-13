@@ -1,6 +1,7 @@
 package net.elfdump.campusassistant;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.indoorway.android.common.sdk.model.IndoorwayObjectParameters;
 import com.indoorway.android.map.sdk.config.MapViewConfig;
@@ -17,6 +18,7 @@ class CustomMapViewConfig extends MapViewConfig {
 
     @Override
     public int getRoomBackgroundColor(@NotNull IndoorwayObjectParameters obj) {
+        Log.e("nngjknfjngfdj", obj.toString());
         return getApplicationContext().getResources().getColor(R.color.white);
     }
 

@@ -32,7 +32,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -181,16 +180,11 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             }
         });
 
-        try {
-            Field f2 = getClass().getDeclaredField("a");
-            Log.i("XDXDXDXDXDXDXD", String.valueOf(f2.getModifiers()));
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-
-        IndoorwayMapView map = (IndoorwayMapView)((MapViewDelegate) mapFragment.getMapView()).getOriginalMapView();
+        /*IndoorwayMapView map = (IndoorwayMapView)((MapViewDelegate) mapFragment.getMapView()).getOriginalMapView();
         Hack.setFinal(map, "mapViewConfig", new CustomMapViewConfig(this));
         map.getDisplay().invalidate();
+
+        Hack.logField(map, "mapViewConfig");*/
 
         mapFragment.getMapView().getSelection()
             .setOnObjectSelectedListener(new OnObjectSelectedListener() {
