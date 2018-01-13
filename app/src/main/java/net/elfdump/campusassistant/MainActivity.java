@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             mapFragment.getMapView().getNavigation().start(currentPosition, IndoorwayConstants.ROOM_216_UUID);
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +60,26 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         IndoorwayMapFragment fragment = IndoorwayMapFragment.newInstance(this, config);
         fragmentTransaction.add(R.id.fragment_container, fragment, IndoorwayMapFragment.class.getSimpleName());
         fragmentTransaction.commit();
+    }
 
-        // TODO: Unregister
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         IndoorwayLocationSdk.instance()
             .position()
             .onChange()
             .register(positionListener);
+    }
+
+    @Override
+    protected void onStop() {
+        IndoorwayLocationSdk.instance()
+            .position()
+            .onChange()
+            .unregister(positionListener);
+
+        super.onStop();
     }
 
     private final Runnable mUpdateUI = new Runnable() {
