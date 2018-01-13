@@ -1,7 +1,6 @@
 package net.elfdump.campusassistant;
 
 import android.graphics.Color;
-import android.os.Debug;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -12,18 +11,13 @@ import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
 import com.indoorway.android.common.sdk.model.Coordinates;
 import com.indoorway.android.common.sdk.model.IndoorwayMap;
-import com.indoorway.android.common.sdk.model.IndoorwayObjectParameters;
-import com.indoorway.android.common.sdk.model.IndoorwayPoiType;
 import com.indoorway.android.common.sdk.model.IndoorwayPosition;
-import com.indoorway.android.common.sdk.model.Visitor;
 import com.indoorway.android.common.sdk.model.VisitorLocation;
 import com.indoorway.android.common.sdk.task.IndoorwayTask;
 import com.indoorway.android.fragments.sdk.map.IndoorwayMapFragment;
 import com.indoorway.android.fragments.sdk.map.MapFragment;
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle;
-import com.indoorway.android.map.sdk.view.drawable.figures.DrawableIcon;
-import com.indoorway.android.map.sdk.view.drawable.figures.DrawableText;
 import com.indoorway.android.map.sdk.view.drawable.layers.MarkersLayer;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,17 +32,16 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
     private IndoorwayPosition currentPosition;
 
-    Action1<IndoorwayPosition> listener = new Action1<IndoorwayPosition>() {
+    Action1<IndoorwayPosition> positionListener = new Action1<IndoorwayPosition>() {
         @Override
         public void onAction(IndoorwayPosition position) {
             // store last position as a field
             currentPosition = position;
 
             // react for position changes...
-            mapFragment.getMapView().getNavigation().start(currentPosition, "3-_M01M3r5w_ca808"); // Room 216
+            mapFragment.getMapView().getNavigation().start(currentPosition, IndoorwayConstants.ROOM_216_UUID);
         }
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         IndoorwayLocationSdk.instance()
             .position()
             .onChange()
-            .register(listener);
+            .register(positionListener);
     }
 
     private final Runnable mUpdateUI = new Runnable() {
@@ -79,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 .setOnCompletedListener(new Action1<List<VisitorLocation>>() {
                     @Override
                     public void onAction(List<VisitorLocation> visitorLocations) {
-                        Log.i("DDFSFSDF", "WORKING");
+//                        Log.i(IndoorwayConstants.LOG_TAG, "WORKING");
                         for(VisitorLocation visitor : visitorLocations) {
                             if (visitor.getLat() == null || visitor.getLon() == null || visitor.getTimestamp() == null) continue; // DLACZEGO TE NULLE
 
@@ -87,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
                             if (new Date().getTime() - visitor.getTimestamp().getTime() > 10000) continue; // za stare
 
-                            Log.i("ASDDSFDSFSFS", visitor.toString());
+//                            Log.i(IndoorwayConstants.LOG_TAG, visitor.toString());
                             myLayer.add(
                                 new DrawableCircle(
                                     visitor.getVisitorUuid(),
@@ -100,14 +93,14 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                             );
                         }
 
-                        mHandler.postDelayed(mUpdateUI, 1000);
+                        mHandler.postDelayed(mUpdateUI, 3000);
                     }
                 })
                 .setOnFailedListener(new Action1<IndoorwayTask.ProcessingException>() {
                     @Override
                     public void onAction(IndoorwayTask.ProcessingException e) {
-                        Log.e("DFSDFSDDFS", "lel");
-                        mHandler.postDelayed(mUpdateUI, 1000);
+                        Log.e(IndoorwayConstants.LOG_TAG, "lel");
+                        mHandler.postDelayed(mUpdateUI, 10000);
                     }
                 })
                 .execute();
@@ -115,17 +108,14 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     };
 
     @Override
-    public void onMapFragmentReady(@NotNull MapFragment mapFragment) {
+    public void onMapFragmentReady(@NotNull final MapFragment mapFragment) {
         this.mapFragment = mapFragment;
-        //mapFragment.getMapView().load(IndoorwayConstants.BUIDING_UUID, IndoorwayConstants.FLOOR2_UUID);
         mapFragment.getMapView().setOnMapLoadCompletedListener(new Action1<IndoorwayMap>() {
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
-                myLayer = MainActivity.this.mapFragment.getMapView().getMarker().addLayer(100.0f);
+                myLayer = mapFragment.getMapView().getMarker().addLayer(100.0f);
 
-                for(IndoorwayObjectParameters obj : indoorwayMap.getObjects()) {
-                    Log.i("FDSfsdfsfdsf", obj.getId()+";"+obj.getName()+";"+obj.getType()+";"+obj.getCenterPoint().toString());
-                }
+                mapFragment.getMapView().getSelection().selectObject(IndoorwayConstants.ROOM_216_UUID); //TODO: demo
 
                 mHandler.post(mUpdateUI);
             }

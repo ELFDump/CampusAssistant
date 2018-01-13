@@ -6,4 +6,8 @@ public final class IndoorwayConstants {
     public static final String FLOOR0_UUID = "7-QLYjkafkE";
     public static final String FLOOR1_UUID = "gVI7XXuBFCQ";
     public static final String FLOOR2_UUID = "3-_M01M3r5w";
+
+    public static final String ROOM_216_UUID = "3-_M01M3r5w_ca808"; // POKÓJ Z JEDZENIEM // TODO: może jednak po nazwach? xd
+
+    public static final String LOG_TAG = "CampusAsssistant";
 }
