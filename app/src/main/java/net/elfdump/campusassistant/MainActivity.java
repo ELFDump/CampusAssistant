@@ -14,12 +14,14 @@ import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
 import com.indoorway.android.common.sdk.model.Coordinates;
 import com.indoorway.android.common.sdk.model.IndoorwayMap;
+import com.indoorway.android.common.sdk.model.IndoorwayObjectParameters;
 import com.indoorway.android.common.sdk.model.IndoorwayPosition;
 import com.indoorway.android.common.sdk.model.VisitorLocation;
 import com.indoorway.android.common.sdk.task.IndoorwayTask;
 import com.indoorway.android.fragments.sdk.map.IndoorwayMapFragment;
 import com.indoorway.android.fragments.sdk.map.MapFragment;
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
+import com.indoorway.android.map.sdk.listeners.OnObjectSelectedListener;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle;
 import com.indoorway.android.map.sdk.view.drawable.layers.MarkersLayer;
 
@@ -135,10 +137,25 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             public void onAction(IndoorwayMap indoorwayMap) {
                 myLayer = mapFragment.getMapView().getMarker().addLayer(100.0f);
 
-                mapFragment.getMapView().getSelection().selectObject(IndoorwayConstants.ROOM_216_UUID); //TODO: demo
-
                 mHandler.post(mUpdateUI);
             }
         });
+        mapFragment.getMapView().getSelection()
+            .setOnObjectSelectedListener(new OnObjectSelectedListener() {
+                @Override
+                public boolean canObjectBeSelected(IndoorwayObjectParameters parameters) {
+                    return parameters.getId().equals(IndoorwayConstants.ROOM_216_UUID);
+                }
+
+                @Override
+                public void onObjectSelected(IndoorwayObjectParameters parameters) {
+                    Log.i(IndoorwayConstants.LOG_TAG, "SELECT "+parameters.getName()+" "+parameters.getId());
+                }
+
+                @Override
+                public void onSelectionCleared() {
+                    Log.i(IndoorwayConstants.LOG_TAG, "DESELECT");
+                }
+            });
     }
 }
