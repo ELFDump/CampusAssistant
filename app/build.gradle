@@ -44,4 +44,8 @@ dependencies {
     compile "com.indoorway.android:qrcode:$indoorway_version"
     // optional if you don't want to use fragments
     compile "com.indoorway.android:fragments:$indoorway_version"
+
+    compile 'com.sothree.slidinguppanel:library:3.4.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 }
