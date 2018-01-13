@@ -37,7 +37,7 @@ public class MyApplication extends Application {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(MyApplication.this);
             builder.setSmallIcon(R.drawable.ic_launcher_foreground);
             builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground));
-            builder.setContentTitle("snfojdsfjnds");
+            builder.setContentTitle("Proximity event triggered!");
             builder.setContentText(proximityEvent.toString());
             builder.setSubText(proximityEvent.toString());
             NotificationManager notificationManager = (NotificationManager) getSystemService(
@@ -62,10 +62,10 @@ public class MyApplication extends Application {
         Log.i(IndoorwayConstants.LOG_TAG, "App started");
 
         StandardBackgroundNotificationBuilder notificationBuilder = new StandardBackgroundNotificationBuilder(
-            "channel-id",
-            "channel-name",
-            "title",
-            "description",
+            "CampusAssistant-running",
+            "CampusAssistant: running",
+            "CampusAssistant",
+            "CampusAssistant is running!",
             R.drawable.ic_launcher_foreground
         );
         IndoorwayLocationSdk.background().enable(notificationBuilder);
@@ -80,8 +80,8 @@ public class MyApplication extends Application {
                 public void onAction(IndoorwayMap indoorwayMap) {
                     Log.i(IndoorwayConstants.LOG_TAG, "Mamy mapę");
 
-                    for(IndoorwayObjectParameters obj : indoorwayMap.getObjects()) {
-                        Log.i(IndoorwayConstants.LOG_TAG, obj.getId()+";"+obj.getName()+";"+obj.getType()+";"+obj.getCenterPoint().toString());
+                    for (IndoorwayObjectParameters obj : indoorwayMap.getObjects()) {
+                        Log.i(IndoorwayConstants.LOG_TAG, obj.getId() + ";" + obj.getName() + ";" + obj.getType() + ";" + obj.getCenterPoint().toString());
                     }
 
                     IndoorwayObjectParameters room216 = indoorwayMap.objectWithId(IndoorwayConstants.ROOM_216_UUID);
@@ -110,7 +110,7 @@ public class MyApplication extends Application {
                 @Override
                 public void onAction(IndoorwayTask.ProcessingException e) {
                     // handle error, original exception is given on e.getCause()
-                    Log.e(IndoorwayConstants.LOG_TAG, "lol no jak to "+e.toString());
+                    Log.e(IndoorwayConstants.LOG_TAG, "lol no jak to " + e.toString());
                 }
             })
             .execute();

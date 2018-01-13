@@ -91,12 +91,14 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     @Override
                     public void onAction(List<VisitorLocation> visitorLocations) {
 //                        Log.i(IndoorwayConstants.LOG_TAG, "WORKING");
-                        for(VisitorLocation visitor : visitorLocations) {
-                            if (visitor.getLat() == null || visitor.getLon() == null || visitor.getTimestamp() == null) continue; // DLACZEGO TE NULLE
+                        for (VisitorLocation visitor : visitorLocations) {
+                            if (visitor.getLat() == null || visitor.getLon() == null || visitor.getTimestamp() == null)
+                                continue; // DLACZEGO TE NULLE
 
                             myLayer.remove(visitor.getVisitorUuid());
 
-                            if (new Date().getTime() - visitor.getTimestamp().getTime() > 10000) continue; // za stare
+                            if (new Date().getTime() - visitor.getTimestamp().getTime() > 10000)
+                                continue; // za stare
 
 //                            Log.i(IndoorwayConstants.LOG_TAG, visitor.toString());
                             myLayer.add(
