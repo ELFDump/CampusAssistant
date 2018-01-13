@@ -24,6 +24,7 @@ import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.map.sdk.listeners.OnObjectSelectedListener;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle;
 import com.indoorway.android.map.sdk.view.drawable.layers.MarkersLayer;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final SlidingUpPanelLayout mLayout = findViewById(R.id.sliding_layout);
+        mLayout.setOverlayed(true);
+        mLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
         IndoorwayMapFragment.Config config = new IndoorwayMapFragment.Config();
         config.setLocationButtonVisible(true);
@@ -150,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 @Override
                 public void onObjectSelected(IndoorwayObjectParameters parameters) {
                     Log.i(IndoorwayConstants.LOG_TAG, "SELECT "+parameters.getName()+" "+parameters.getId());
+                    final SlidingUpPanelLayout mLayout = findViewById(R.id.sliding_layout);
+                    mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 }
 
                 @Override
