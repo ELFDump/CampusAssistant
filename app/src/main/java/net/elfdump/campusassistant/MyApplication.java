@@ -5,8 +5,8 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -25,12 +25,31 @@ import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.location.sdk.background.StandardBackgroundNotificationBuilder;
 import com.indoorway.android.location.sdk.listeners.OnProximityEventListener;
 
+import net.elfdump.campusassistant.api.RestClient;
+import net.elfdump.campusassistant.api.model.UserPlaceEvent;
+
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public class MyApplication extends Application {
     private static final String RUNNING_NOTIFICATION_CHANNEL_ID = "CampusAssistant-running";
     private static final String NOTIFICATION_CHANNEL_ID = "CampusAssistant-notification";
     private static final int ENTRY_EXIT_NOTIFICATION_ID = 1234;
+
+    private static class SendUserPlaceEvent extends AsyncTask<UserPlaceEvent, Void, Void> {
+        @Override
+        protected Void doInBackground(UserPlaceEvent... userPlaceEvents) {
+            for(UserPlaceEvent userPlaceEvent : userPlaceEvents) {
+                try {
+                    getRestClient().location().roomChange(userPlaceEvent).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+    }
 
     OnProximityEventListener proximityEventListener = new OnProximityEventListener() {
         @Override
@@ -51,6 +70,13 @@ public class MyApplication extends Application {
             NotificationManager notificationManager = (NotificationManager) getSystemService(
                 NOTIFICATION_SERVICE);
             notificationManager.notify(ENTRY_EXIT_NOTIFICATION_ID, notification);
+
+            UserPlaceEvent restEvent = new UserPlaceEvent();
+            restEvent.setUserId(Preferences.getUserUUID(MyApplication.this));
+            restEvent.setPlaceId(roomId);
+            restEvent.setAction(trigger == IndoorwayProximityEvent.Trigger.ENTER ? UserPlaceEvent.PlaceAction.ENTER : UserPlaceEvent.PlaceAction.LEAVE);
+            restEvent.setTime(new Date().getTime());
+            new SendUserPlaceEvent().execute(restEvent);
         }
     };
 
@@ -164,5 +190,16 @@ public class MyApplication extends Application {
                 }
             })
             .execute();
+    }
+
+
+    private static RestClient restClient = null;
+
+    public static RestClient getRestClient() {
+        if (restClient == null) {
+            restClient = new RestClient();
+        }
+
+        return restClient;
     }
 }

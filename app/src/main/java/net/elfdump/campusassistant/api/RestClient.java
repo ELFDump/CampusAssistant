@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestClient {
 
-    private static final String baseUrl = "http://192.168.100.79/campus-assistant-api/public_html/";
+    private static final String baseUrl = "http://zalosne.wlasnadomena.pl/";
     private Retrofit retrofit;
 
     public RestClient() {
