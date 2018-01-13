@@ -189,11 +189,4 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 }
             });
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.top_menu, menu);
-        return true;
-    }*/
 }

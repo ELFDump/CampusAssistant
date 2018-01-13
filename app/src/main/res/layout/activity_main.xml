@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_weight="1"
-            android:background="@android:color/darker_gray"
+            android:background="@color/indoorway_inaccessible_color"
             android:orientation="horizontal">
 
 
@@ -35,10 +35,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/cardview_light_background"
+                android:background="@color/indoorway_map_default_room_outline"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:text="POWIADOMIENIE"
+                android:textColor="@color/windowBackground"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -47,54 +48,87 @@
 
     <!-- SLIDING LAYOUT -->
     <LinearLayout
+        android:id="@+id/dragView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:orientation="vertical"
+        android:background="@color/indoorway_map_default_room_outline"
         android:clickable="true"
         android:focusable="false"
-        android:id="@+id/dragView">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="68dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/cardview_light_background"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="ILOŚĆ OSÓB"
+                        android:textColor="@color/windowBackground"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="16sp"
+                        android:layout_weight="1"
+                        android:text="12"
+                        android:textColor="@color/windowBackground"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp">
+                android:orientation="vertical"
+                android:paddingRight="10dp">
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/textView32"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="Zatłoczenie"
+                    android:text="ŚREDNI CZAS"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/windowBackground"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/name32"
                     android:layout_width="match_parent"
                     android:layout_height="16sp"
                     android:layout_weight="1"
-                    android:text="12"
+                    android:text="12 min 30 s"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/windowBackground"
                     android:textSize="16sp" />
             </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
 
         <!--<ScrollView-->
         <!--android:id="@+id/sv"-->
