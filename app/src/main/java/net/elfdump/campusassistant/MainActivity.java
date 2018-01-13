@@ -164,6 +164,10 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
                     selectedObject = parameters.getId();
                     mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
+
+                    mLayout.setPanelState(
+                            mLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN ?
+                            SlidingUpPanelLayout.PanelState.HIDDEN : SlidingUpPanelLayout.PanelState.COLLAPSED);
                 }
 
                 @Override
@@ -171,6 +175,9 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     Log.i(IndoorwayConstants.LOG_TAG, "DESELECT");
                     selectedObject = null;
                     mapFragment.getMapView().getNavigation().stop();
+
+                    final SlidingUpPanelLayout mLayout = findViewById(R.id.sliding_layout);
+                    mLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
                 }
             });
     }

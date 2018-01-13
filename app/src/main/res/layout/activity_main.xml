@@ -33,7 +33,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="100dp"
         android:orientation="horizontal">
 
         <TextView
@@ -42,26 +42,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textSize="14sp"
+            android:text="Osób w strefie: 666"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"/>
-
-        <Button
-            android:id="@+id/follow"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="14sp"
-            android:gravity="center_vertical|right"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"/>
-
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-    </ListView>
 
         <!--<ScrollView-->
         <!--android:id="@+id/sv"-->
