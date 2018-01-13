@@ -163,12 +163,16 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     final SlidingUpPanelLayout mLayout = findViewById(R.id.sliding_layout);
                     mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
-                    selectedObject = parameters.getId();
-                    mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
+                    if (parameters.getId().equals(selectedObject)) {
+                        mLayout.setPanelState(
+                                mLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN ?
+                                        SlidingUpPanelLayout.PanelState.HIDDEN : SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    }
 
-                    mLayout.setPanelState(
-                        mLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN ?
-                            SlidingUpPanelLayout.PanelState.HIDDEN : SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    selectedObject = parameters.getId();
+                    if (currentPosition != null) {
+                        mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
+                    }
                 }
 
                 @Override
