@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         IndoorwayMapFragment fragment = IndoorwayMapFragment.newInstance(this, config);
         fragmentTransaction.add(R.id.fragment_container, fragment, IndoorwayMapFragment.class.getSimpleName());
         fragmentTransaction.commit();
+
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.elfdump.campusassistant.api.model;
 
+@Deprecated
 public class User {
     private String uuid;
     private String nickname;

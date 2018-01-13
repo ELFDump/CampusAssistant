@@ -1,5 +1,6 @@
 package net.elfdump.campusassistant.api.model;
 
+@Deprecated // Zrobi się to przez Indoorway jeśli już
 public class UserLocationEvent extends UserEvent{
     private double latitude;
     private double longitude;

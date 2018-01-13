@@ -1,13 +1,13 @@
 package net.elfdump.campusassistant.api.model;
 
 public class UserEvent extends Event{
-    private String userId;
+    private String uuid;
 
     public String getUserId() {
-        return userId;
+        return uuid;
     }
 
     public void setUserId(String userUuid) {
-        this.userId = userUuid;
+        this.uuid = userUuid;
     }
 }

@@ -18,6 +18,7 @@ public interface LocationService {
     Call<Map<String, Integer>> getPeopleCount();
 
     @POST("location/track")
+    @Deprecated //????
     Call<Void> update(@Body UserLocationEvent placeEvent);
 
 }
