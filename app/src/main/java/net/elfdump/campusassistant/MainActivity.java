@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
@@ -185,5 +188,12 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     mLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
                 }
             });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_menu, menu);
+        return true;
     }
 }

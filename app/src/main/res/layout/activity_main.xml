@@ -2,6 +2,7 @@
 <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,16 +11,38 @@
     sothree:umanoShadowHeight="4dp">
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/root_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-    <fragment
-        android:id="@+id/mapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.indoorway.android.fragments.sdk.map.IndoorwayMapFragment"
-        />
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@android:color/darker_gray"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/name2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/cardview_light_background"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="POWIADOMIENIE"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
     </FrameLayout>
 
     <!-- SLIDING LAYOUT -->
@@ -38,29 +61,36 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/cardview_light_background"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/darker_gray"
-                android:orientation="horizontal">
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:orientation="vertical"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:text="Osób w strefie: 666"
-                android:textSize="16sp" />
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Zatłoczenie"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="16sp"
+                    android:layout_weight="1"
+                    android:text="12"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
