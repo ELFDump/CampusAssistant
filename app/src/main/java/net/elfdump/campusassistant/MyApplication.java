@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
@@ -24,6 +25,8 @@ import com.indoorway.android.common.sdk.task.IndoorwayTask;
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.location.sdk.background.StandardBackgroundNotificationBuilder;
 import com.indoorway.android.location.sdk.listeners.OnProximityEventListener;
+
+import java.util.UUID;
 
 public class MyApplication extends Application {
     OnProximityEventListener proximityEventListener = new OnProximityEventListener() {
@@ -57,9 +60,10 @@ public class MyApplication extends Application {
         IndoorwaySdk.configure(IndoorwayConstants.API_KEY);
 
         Visitor visitor = new Visitor();
+        visitor.setName(Preferences.getUserUUID(this));
         visitor.setShareLocation(true);
         IndoorwaySdk.instance().visitor().setup(visitor);
-        Log.i(IndoorwayConstants.LOG_TAG, "App started");
+        Log.i(IndoorwayConstants.LOG_TAG, "App started, visitor: "+visitor.toString());
 
         StandardBackgroundNotificationBuilder notificationBuilder = new StandardBackgroundNotificationBuilder(
             "CampusAssistant-running",
