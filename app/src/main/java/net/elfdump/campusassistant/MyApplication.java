@@ -141,30 +141,27 @@ public class MyApplication extends Application {
                                         Log.i(IndoorwayConstants.LOG_TAG, obj.getId() + ";" + obj.getName() + ";" + obj.getType() + ";" + obj.getCenterPoint().toString());
                                     }
 
-                                    // ... and for each room on the selectable list ...
-                                    for (String room : IndoorwayConstants.SELECTABLE_ROOMS) {
-                                        IndoorwayObjectParameters roomParams = indoorwayMap.objectWithId(room);
-                                        if (roomParams == null) {
-                                            // Probably on a different floor
-                                            continue;
-                                        }
+                                    // ... and for each room ...
+                                    for (IndoorwayObjectParameters room : indoorwayMap.getObjects()) {
+                                        if (!IndoorwayConstants.isRoom(room))
+                                            continue; // I said, for each ROOM
 
                                         // ... register the proximity events
 
                                         IndoorwayLocationSdk.instance().customProximityEvents()
                                             .add(new IndoorwayProximityEvent(
-                                                room + "+enter",
+                                                room.getId() + "+enter",
                                                 IndoorwayProximityEvent.Trigger.ENTER,
-                                                new IndoorwayProximityEventShape.Polygon(roomParams.getCoordinates()),
+                                                new IndoorwayProximityEventShape.Polygon(room.getCoordinates()),
                                                 IndoorwayConstants.BUILDING_UUID,
                                                 floor.getUuid()
                                             ));
 
                                         IndoorwayLocationSdk.instance().customProximityEvents()
                                             .add(new IndoorwayProximityEvent(
-                                                room + "+exit",
+                                                room.getId() + "+exit",
                                                 IndoorwayProximityEvent.Trigger.EXIT,
-                                                new IndoorwayProximityEventShape.Polygon(roomParams.getCoordinates()),
+                                                new IndoorwayProximityEventShape.Polygon(room.getCoordinates()),
                                                 IndoorwayConstants.BUILDING_UUID,
                                                 floor.getUuid()
                                             ));

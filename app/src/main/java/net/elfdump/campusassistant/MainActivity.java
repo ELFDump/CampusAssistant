@@ -38,7 +38,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements IndoorwayMapFragment.OnMapFragmentReadyListener {
-    private final Handler mHandler = new Handler();
     private MapFragment mapFragment;
     private MarkersLayer myLayer;
 
@@ -120,8 +119,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             .register(proximityListener);
 
         timer = new Timer();
-        timer.schedule(new UpdateVisitorIcons(), 0, 2000);
-        timer.schedule(new UpdatePeopleCount(), 0, 10000);
+        timer.schedule(new UpdateVisitorIcons(), 0, 1000); // TODO: 2000
+        timer.schedule(new UpdatePeopleCount(), 0, 1000); // TODO: 10000
     }
 
     @Override
@@ -232,11 +231,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 @Override
                 public boolean canObjectBeSelected(IndoorwayObjectParameters parameters) {
                     Log.i(IndoorwayConstants.LOG_TAG, parameters.getId());
-                    for (String x : IndoorwayConstants.SELECTABLE_ROOMS) {
-                        if (parameters.getId().equals(x))
-                            return true;
-                    }
-                    return false;
+                    return IndoorwayConstants.isRoom(parameters);
                 }
 
                 @Override
