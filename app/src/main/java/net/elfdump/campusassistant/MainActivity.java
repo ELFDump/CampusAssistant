@@ -154,9 +154,14 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     @Override
                     public void onAction(List<VisitorLocation> visitorLocations) {
 //                        Log.i(IndoorwayConstants.LOG_TAG, "WORKING");
+                        IndoorwayMap indoorwayMap = mapFragment.getCurrentMap();
+                        assert indoorwayMap != null;
                         for (VisitorLocation visitor : visitorLocations) {
-                            if (visitor.getLat() == null || visitor.getLon() == null || visitor.getTimestamp() == null)
+                            if (visitor.getLat() == null || visitor.getLon() == null || visitor.getTimestamp() == null || visitor.getBuildingUuid() == null || visitor.getMapUuid() == null)
                                 continue; // DLACZEGO TE NULLE
+
+                            if (!visitor.getBuildingUuid().equals(indoorwayMap.getBuildingUuid()) || !visitor.getMapUuid().equals(indoorwayMap.getMapUuid()))
+                                continue; // złe piętro
 
                             myLayer.remove(visitor.getVisitorUuid());
 
