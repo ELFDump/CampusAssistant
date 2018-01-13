@@ -37,15 +37,17 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     private MarkersLayer myLayer;
 
     private IndoorwayPosition currentPosition;
+    private String selectedObject;
 
     Action1<IndoorwayPosition> positionListener = new Action1<IndoorwayPosition>() {
         @Override
         public void onAction(IndoorwayPosition position) {
-            // store last position as a field
             currentPosition = position;
 
-            // react for position changes...
-            mapFragment.getMapView().getNavigation().start(currentPosition, IndoorwayConstants.ROOM_216_UUID);
+            if (selectedObject != null)
+                mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
+            else
+                mapFragment.getMapView().getNavigation().stop();
         }
     };
 
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         mLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
         IndoorwayMapFragment.Config config = new IndoorwayMapFragment.Config();
-        config.setLocationButtonVisible(true);
+        config.setLocationButtonVisible(false);
         config.setStartPositioningOnResume(true);
         config.setLoadLastKnownMap(true);
 
@@ -149,19 +151,26 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             .setOnObjectSelectedListener(new OnObjectSelectedListener() {
                 @Override
                 public boolean canObjectBeSelected(IndoorwayObjectParameters parameters) {
-                    return parameters.getId().equals(IndoorwayConstants.ROOM_216_UUID);
+                    Log.i(IndoorwayConstants.LOG_TAG, parameters.getId());
+                    return parameters.getId().equals(IndoorwayConstants.ROOM_216_UUID) || parameters.getId().equals(IndoorwayConstants.ROOM_213_UUID);
                 }
 
                 @Override
                 public void onObjectSelected(IndoorwayObjectParameters parameters) {
                     Log.i(IndoorwayConstants.LOG_TAG, "SELECT "+parameters.getName()+" "+parameters.getId());
+
                     final SlidingUpPanelLayout mLayout = findViewById(R.id.sliding_layout);
                     mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
+                    selectedObject = parameters.getId();
+                    mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
                 }
 
                 @Override
                 public void onSelectionCleared() {
                     Log.i(IndoorwayConstants.LOG_TAG, "DESELECT");
+                    selectedObject = null;
+                    mapFragment.getMapView().getNavigation().stop();
                 }
             });
     }
