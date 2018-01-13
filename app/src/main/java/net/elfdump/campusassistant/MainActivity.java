@@ -28,8 +28,12 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements IndoorwayMapFragment.OnMapFragmentReadyListener {
     private final Handler mHandler = new Handler();
@@ -38,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
     private IndoorwayPosition currentPosition;
     private String selectedObject;
+
+    private Timer timer;
+
+    private Map<String, Integer> peopleCount;
 
     Action1<IndoorwayPosition> positionListener = new Action1<IndoorwayPosition>() {
         @Override
@@ -79,10 +87,16 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             .position()
             .onChange()
             .register(positionListener);
+
+        timer = new Timer();
+        timer.schedule(new UpdateVisitorIcons(), 0, 2000);
+        timer.schedule(new UpdatePeopleCount(), 0, 10000);
     }
 
     @Override
     protected void onStop() {
+        timer.cancel();
+
         IndoorwayLocationSdk.instance()
             .position()
             .onChange()
@@ -91,8 +105,12 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         super.onStop();
     }
 
-    private final Runnable mUpdateUI = new Runnable() {
+    private class UpdateVisitorIcons extends TimerTask {
+        @Override
         public void run() {
+            if (myLayer == null)
+                return;
+
             IndoorwaySdk.instance()
                 .visitors()
                 .locations()
@@ -121,20 +139,31 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                                 )
                             );
                         }
-
-                        mHandler.postDelayed(mUpdateUI, 3000);
                     }
                 })
                 .setOnFailedListener(new Action1<IndoorwayTask.ProcessingException>() {
                     @Override
                     public void onAction(IndoorwayTask.ProcessingException e) {
                         Log.e(IndoorwayConstants.LOG_TAG, "lel");
-                        mHandler.postDelayed(mUpdateUI, 10000);
                     }
                 })
                 .execute();
         }
-    };
+    }
+
+    private class UpdatePeopleCount extends TimerTask {
+        @Override
+        public void run() {
+            try {
+                peopleCount = MyApplication.getRestClient().location().getPeopleCount().execute().body();
+                for(String room : peopleCount.keySet()) {
+                    Log.i(IndoorwayConstants.LOG_TAG, "Room "+room+": "+peopleCount.get(room));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
     public void onMapFragmentReady(@NotNull final MapFragment mapFragment) {
@@ -143,8 +172,6 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
                 myLayer = mapFragment.getMapView().getMarker().addLayer(100.0f);
-
-                mHandler.post(mUpdateUI);
             }
         });
         mapFragment.getMapView().getSelection()
