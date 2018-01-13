@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.widget.TextView;
 
 import com.indoorway.android.common.sdk.IndoorwaySdk;
@@ -18,8 +15,8 @@ import com.indoorway.android.common.sdk.model.IndoorwayMap;
 import com.indoorway.android.common.sdk.model.IndoorwayObjectParameters;
 import com.indoorway.android.common.sdk.model.IndoorwayPosition;
 import com.indoorway.android.common.sdk.model.VisitorLocation;
+import com.indoorway.android.common.sdk.model.proximity.IndoorwayProximityEvent;
 import com.indoorway.android.common.sdk.task.IndoorwayTask;
-import com.indoorway.android.fragments.map.MapViewDelegate;
 import com.indoorway.android.fragments.sdk.map.IndoorwayMapFragment;
 import com.indoorway.android.fragments.sdk.map.MapFragment;
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
@@ -62,6 +59,30 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         }
     };
 
+    Action1<IndoorwayProximityEvent> proximityListener = new Action1<IndoorwayProximityEvent>() {
+        @Override
+        public void onAction(IndoorwayProximityEvent indoorwayProximityEvent) {
+            if (indoorwayProximityEvent.getTrigger() == IndoorwayProximityEvent.Trigger.EXIT) {
+                ((TextView) findViewById(R.id.notification)).setText("-");
+            }
+
+            if (indoorwayProximityEvent.getTrigger() != IndoorwayProximityEvent.Trigger.ENTER)
+                return;
+
+            IndoorwayMap indoorwayMap = mapFragment.getCurrentMap();
+            if (!indoorwayProximityEvent.isForBuildingAndMap(indoorwayMap.getBuildingUuid(), indoorwayMap.getMapUuid()))
+                return;
+
+            String roomId = indoorwayProximityEvent.getIdentifier().split("\\+")[0];
+            IndoorwayObjectParameters room = indoorwayMap.objectWithId(roomId);
+            assert room != null;
+            String roomName = room.getName();
+            Log.e("jdnfsjfbdsfbhfb", roomName);
+
+            ((TextView) findViewById(R.id.notification)).setText(roomName);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +101,6 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         IndoorwayMapFragment fragment = IndoorwayMapFragment.newInstance(this, config);
         fragmentTransaction.add(R.id.fragment_container, fragment, IndoorwayMapFragment.class.getSimpleName());
         fragmentTransaction.commit();
-
-
     }
 
     @Override
@@ -93,6 +112,11 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             .onChange()
             .register(positionListener);
 
+        IndoorwayLocationSdk.instance()
+            .customProximityEvents()
+            .onEvent()
+            .register(proximityListener);
+
         timer = new Timer();
         timer.schedule(new UpdateVisitorIcons(), 0, 2000);
         timer.schedule(new UpdatePeopleCount(), 0, 10000);
@@ -101,6 +125,11 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     @Override
     protected void onStop() {
         timer.cancel();
+
+        IndoorwayLocationSdk.instance()
+            .customProximityEvents()
+            .onEvent()
+            .unregister(proximityListener);
 
         IndoorwayLocationSdk.instance()
             .position()
