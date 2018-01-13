@@ -1,13 +1,10 @@
 package net.elfdump.campusassistant;
 
-import android.app.NotificationManager;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.indoorway.android.common.sdk.IndoorwaySdk;
@@ -152,12 +149,16 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 @Override
                 public boolean canObjectBeSelected(IndoorwayObjectParameters parameters) {
                     Log.i(IndoorwayConstants.LOG_TAG, parameters.getId());
-                    return parameters.getId().equals(IndoorwayConstants.ROOM_216_UUID) || parameters.getId().equals(IndoorwayConstants.ROOM_213_UUID);
+                    for (String x : IndoorwayConstants.SELECTABLE_ROOMS) {
+                        if (parameters.getId().equals(x))
+                            return true;
+                    }
+                    return false;
                 }
 
                 @Override
                 public void onObjectSelected(IndoorwayObjectParameters parameters) {
-                    Log.i(IndoorwayConstants.LOG_TAG, "SELECT "+parameters.getName()+" "+parameters.getId());
+                    Log.i(IndoorwayConstants.LOG_TAG, "SELECT " + parameters.getName() + " " + parameters.getId());
 
                     final SlidingUpPanelLayout mLayout = findViewById(R.id.sliding_layout);
                     mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
 
                     mLayout.setPanelState(
-                            mLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN ?
+                        mLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN ?
                             SlidingUpPanelLayout.PanelState.HIDDEN : SlidingUpPanelLayout.PanelState.COLLAPSED);
                 }
 

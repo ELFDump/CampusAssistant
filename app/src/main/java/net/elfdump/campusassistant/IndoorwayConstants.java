@@ -10,5 +10,7 @@ public final class IndoorwayConstants {
     public static final String ROOM_216_UUID = "3-_M01M3r5w_ca808"; // POKÓJ Z JEDZENIEM // TODO: może jednak po nazwach? xd
     public static final String ROOM_213_UUID = "3-_M01M3r5w_fe9c8"; // Nasz pokój
 
+    public static final String[] SELECTABLE_ROOMS = {ROOM_213_UUID, ROOM_216_UUID};
+
     public static final String LOG_TAG = "CampusAsssistant";
 }
