@@ -1,7 +1,6 @@
 package net.elfdump.campusassistant.api;
 
 import net.elfdump.campusassistant.api.service.LocationService;
-import net.elfdump.campusassistant.api.service.UserService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -20,18 +19,14 @@ public class RestClient {
         httpClient.addInterceptor(logging);
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build();
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(httpClient.build())
+            .build();
     }
 
     public LocationService location() {
         return retrofit.create(LocationService.class);
-    }
-
-    public UserService users() {
-        return retrofit.create(UserService.class);
     }
 
 }

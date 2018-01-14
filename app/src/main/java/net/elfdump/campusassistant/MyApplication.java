@@ -44,7 +44,7 @@ public class MyApplication extends Application {
     private static class SendUserPlaceEvent extends AsyncTask<UserPlaceEvent, Void, Void> {
         @Override
         protected Void doInBackground(UserPlaceEvent... userPlaceEvents) {
-            for(UserPlaceEvent userPlaceEvent : userPlaceEvents) {
+            for (UserPlaceEvent userPlaceEvent : userPlaceEvents) {
                 try {
                     getRestClient().location().roomChange(userPlaceEvent).execute();
                 } catch (IOException e) {
@@ -76,6 +76,7 @@ public class MyApplication extends Application {
                 .build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(
                 NOTIFICATION_SERVICE);
+            assert notificationManager != null;
             notificationManager.notify(ENTRY_EXIT_NOTIFICATION_ID, notification);
 
             UserPlaceEvent restEvent = new UserPlaceEvent();
@@ -122,13 +123,14 @@ public class MyApplication extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationManager != null;
 
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "CampusAssistant: notifications", NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("Powiadomienia o wchodzeniu/wychodzeniu [DEBUG]");
             channel.enableLights(true);
             channel.setLightColor(Color.RED);
             channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{ 100, 100, 100, 100, 100, 500 });
+            channel.setVibrationPattern(new long[]{100, 100, 100, 100, 100, 500});
             notificationManager.createNotificationChannel(channel);
 
             NotificationChannel channel2 = new NotificationChannel(RUNNING_NOTIFICATION_CHANNEL_ID, "CampusAssistant: activity", NotificationManager.IMPORTANCE_MIN);

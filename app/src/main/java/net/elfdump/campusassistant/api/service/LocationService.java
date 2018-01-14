@@ -1,6 +1,5 @@
 package net.elfdump.campusassistant.api.service;
 
-import net.elfdump.campusassistant.api.model.UserLocationEvent;
 import net.elfdump.campusassistant.api.model.UserPlaceEvent;
 
 import java.util.Map;
@@ -16,9 +15,5 @@ public interface LocationService {
 
     @POST("location/track/room/get")
     Call<Map<String, Integer>> getPeopleCount();
-
-    @POST("location/track")
-    @Deprecated //????
-    Call<Void> update(@Body UserLocationEvent placeEvent);
 
 }

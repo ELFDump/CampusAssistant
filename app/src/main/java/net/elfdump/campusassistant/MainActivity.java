@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
             currentPosition = position;
 
-            if (selectedObject != null && currentPosition.getMapUuid().equals(mapFragment.getCurrentMap().getMapUuid()))
+            if (selectedObject != null && mapFragment.getCurrentMap() != null && currentPosition.getMapUuid().equals(mapFragment.getCurrentMap().getMapUuid()))
                 mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
             else
                 mapFragment.getMapView().getNavigation().stop();
@@ -116,14 +116,14 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         findViewById(R.id.level_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR_UUIDS[currentFloor+1]);
+                mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR_UUIDS[currentFloor + 1]);
             }
         });
 
         findViewById(R.id.level_down).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR_UUIDS[currentFloor-1]);
+                mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR_UUIDS[currentFloor - 1]);
             }
         });
     }
@@ -225,11 +225,11 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     return;
                 }
 
-                for(IndoorwayObjectParameters room : mapFragment.getCurrentMap().getObjects()) {
+                for (IndoorwayObjectParameters room : mapFragment.getCurrentMap().getObjects()) {
                     if (!IndoorwayConstants.isRoom(room))
                         continue;
 
-                    Log.i(IndoorwayConstants.LOG_TAG, "Room "+room+": "+getPeopleCount(room.getId()));
+                    Log.i(IndoorwayConstants.LOG_TAG, "Room " + room + ": " + getPeopleCount(room.getId()));
 
                     int green = Color.argb(60, 0, 255, 0);
                     int red = Color.argb(60, 255, 0, 0);
@@ -250,11 +250,11 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
                 myLayer = mapFragment.getMapView().getMarker().addLayer(1.0f);
-                for(int i = 0; i < IndoorwayConstants.FLOOR_UUIDS.length; i++)
-                    if(IndoorwayConstants.FLOOR_UUIDS[i].equals(indoorwayMap.getMapUuid()))
+                for (int i = 0; i < IndoorwayConstants.FLOOR_UUIDS.length; i++)
+                    if (IndoorwayConstants.FLOOR_UUIDS[i].equals(indoorwayMap.getMapUuid()))
                         currentFloor = i;
-                Log.e(IndoorwayConstants.LOG_TAG, "Current floor is "+currentFloor);
-                findViewById(R.id.level_up).setEnabled(currentFloor < IndoorwayConstants.FLOOR_UUIDS.length-1);
+                Log.e(IndoorwayConstants.LOG_TAG, "Current floor is " + currentFloor);
+                findViewById(R.id.level_up).setEnabled(currentFloor < IndoorwayConstants.FLOOR_UUIDS.length - 1);
                 findViewById(R.id.level_down).setEnabled(currentFloor > 0);
             }
         });
@@ -276,13 +276,13 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
                     if (parameters.getId().equals(selectedObject)) {
                         mLayout.setPanelState(
-                                mLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN ?
-                                        SlidingUpPanelLayout.PanelState.HIDDEN : SlidingUpPanelLayout.PanelState.COLLAPSED);
+                            mLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN ?
+                                SlidingUpPanelLayout.PanelState.HIDDEN : SlidingUpPanelLayout.PanelState.COLLAPSED);
                     }
 
                     selectedObject = parameters.getId();
                     updateRoomDetails();
-                    if (currentPosition != null && currentPosition.getMapUuid().equals(mapFragment.getCurrentMap().getMapUuid())) {
+                    if (currentPosition != null && mapFragment.getCurrentMap() != null && currentPosition.getMapUuid().equals(mapFragment.getCurrentMap().getMapUuid())) {
                         mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
                     }
                 }
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
         List<BarEntry> entries = new ArrayList<>();
         for (int i = 7; i < 20; i++) {
-            entries.add(new BarEntry(i, i*2));
+            entries.add(new BarEntry(i, i * 2));
         }
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
@@ -326,25 +326,18 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         if (peopleCount.containsKey(roomId)) {
             amount = peopleCount.get(roomId);
         } else {
-            Log.w(IndoorwayConstants.LOG_TAG, "No data for room: "+roomId);
+            Log.w(IndoorwayConstants.LOG_TAG, "No data for room: " + roomId);
         }
         return amount;
     }
 
     public void setRoomColor(String roomId, int color) {
-        IndoorwayObjectParameters originalRoom = null;
-        for (IndoorwayObjectParameters parameters : mapFragment.getCurrentMap().getObjects()) {
-            if (parameters.getId().equals(roomId)) {
-                originalRoom = parameters;
-            }
+        assert mapFragment.getCurrentMap() != null;
 
-            if (parameters.getId().equals(roomId+"Overlay")) { //TODO: ???
-                myLayer.remove(roomId+"Overlay");
-            }
-        }
+        IndoorwayObjectParameters originalRoom = mapFragment.getCurrentMap().objectWithId(roomId);
 
         if (originalRoom != null) {
-            myLayer.add(new DrawablePolygon(roomId+"Overlay", originalRoom.getCoordinates(), color));
+            myLayer.add(new DrawablePolygon(roomId + "Overlay", originalRoom.getCoordinates(), color));
         }
 
     }

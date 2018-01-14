@@ -12,10 +12,10 @@ public class Event {
     }
 
     public long getTimeInMilliseconds() {
-        return (long)(time * 1000);
+        return (long) (time * 1000);
     }
 
     public void setTimeInMilliseconds(long time) {
-        this.time = ((float)time) / 1000;
+        this.time = ((float) time) / 1000;
     }
 }

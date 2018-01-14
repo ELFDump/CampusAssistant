@@ -1,6 +1,6 @@
 package net.elfdump.campusassistant.api.model;
 
-public class UserPlaceEvent extends UserEvent{
+public class UserPlaceEvent extends UserEvent {
     public enum PlaceAction {
         LEAVE, ENTER
     }

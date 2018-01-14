@@ -19,7 +19,7 @@ public final class IndoorwayConstants {
     public static final String LOG_TAG = "CampusAssistant";
 
     public static boolean isRoom(@NonNull IndoorwayObjectParameters room) {
-        Log.e(LOG_TAG, room.getId()+" "+room.getName()+" "+room.getType());
+        Log.e(LOG_TAG, room.getId() + " " + room.getName() + " " + room.getType());
         assert room.getType() != null;
         return room.getName() != null && room.getType().equals("room") && !room.getName().contains("Corridor") && !room.getName().contains("Floor") && !room.getName().contains("Parter"); //TODO
     }
