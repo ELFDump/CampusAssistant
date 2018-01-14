@@ -324,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
     public void updateRoomDetails() {
         TextView peopleAmount = findViewById(R.id.usersAmount);
+        TextView averageTime = findViewById(R.id.averageTime);
         BarChart chart = findViewById(R.id.chart);
         TextView roomName = findViewById(R.id.room_name);
 
@@ -338,6 +339,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             BarEntry e = entries.get(x);
             e.setY(e.getY()+1);
         }
+
+        averageTime.setText((5+rand.nextInt(40))+" minut");
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
         set.setColor(Color.WHITE);

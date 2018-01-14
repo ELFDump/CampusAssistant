@@ -64,20 +64,20 @@ public class MyApplication extends Application {
             IndoorwayProximityEvent.Trigger trigger = proximityEvent.getTrigger();
             String roomId = proximityEvent.getIdentifier().split("\\+")[0];
 
-            PendingIntent contentIntent = PendingIntent.getActivity(MyApplication.this, 0,
-                new Intent(MyApplication.this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Notification notification = new NotificationCompat.Builder(MyApplication.this, NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Proximity event triggered!")
-                .setContentText(roomId + " " + trigger.toString())
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(proximityEvent.toString()))
-                .setContentIntent(contentIntent)
-                .build();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(
-                NOTIFICATION_SERVICE);
-            assert notificationManager != null;
-            notificationManager.notify(ENTRY_EXIT_NOTIFICATION_ID, notification);
+//            PendingIntent contentIntent = PendingIntent.getActivity(MyApplication.this, 0,
+//                new Intent(MyApplication.this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//            Notification notification = new NotificationCompat.Builder(MyApplication.this, NOTIFICATION_CHANNEL_ID)
+//                .setSmallIcon(R.drawable.ic_launcher_foreground)
+//                .setContentTitle("Proximity event triggered!")
+//                .setContentText(roomId + " " + trigger.toString())
+//                .setStyle(new NotificationCompat.BigTextStyle().bigText(proximityEvent.toString()))
+//                .setContentIntent(contentIntent)
+//                .build();
+//            NotificationManager notificationManager = (NotificationManager) getSystemService(
+//                NOTIFICATION_SERVICE);
+//            assert notificationManager != null;
+//            notificationManager.notify(ENTRY_EXIT_NOTIFICATION_ID, notification);
 
             UserPlaceEvent restEvent = new UserPlaceEvent();
             restEvent.setUserId(Preferences.getUserUUID(MyApplication.this));
