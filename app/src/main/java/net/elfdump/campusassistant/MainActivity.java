@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     Action1<IndoorwayPosition> positionListener = new Action1<IndoorwayPosition>() {
         @Override
         public void onAction(IndoorwayPosition position) {
-            if (currentPosition == null) {
+            if (currentPosition == null || !currentPosition.getMapUuid().equals(position.getMapUuid())) {
                 mapFragment.getMapView().load(position.getBuildingUuid(), position.getMapUuid());
             }
 

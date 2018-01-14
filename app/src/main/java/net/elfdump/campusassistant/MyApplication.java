@@ -55,7 +55,7 @@ public class MyApplication extends Application {
         @Override
         public void onEvent(IndoorwayProximityEvent proximityEvent, IndoorwayProximityEvent.Source source) {
             Log.w(IndoorwayConstants.LOG_TAG, proximityEvent.toString());
-            Toast.makeText(MyApplication.this, proximityEvent.toString(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(MyApplication.this, proximityEvent.toString(), Toast.LENGTH_LONG).show();
 
             IndoorwayProximityEvent.Trigger trigger = proximityEvent.getTrigger();
             String roomId = proximityEvent.getIdentifier().split("\\+")[0];
