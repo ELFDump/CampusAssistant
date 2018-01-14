@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -57,12 +59,18 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
     private Map<String, Integer> peopleCount;
 
+    private int currentFloor = 0;
+
     Action1<IndoorwayPosition> positionListener = new Action1<IndoorwayPosition>() {
         @Override
         public void onAction(IndoorwayPosition position) {
+            if (currentPosition == null) {
+                mapFragment.getMapView().load(position.getBuildingUuid(), position.getMapUuid());
+            }
+
             currentPosition = position;
 
-            if (selectedObject != null)
+            if (selectedObject != null && currentPosition.getMapUuid().equals(mapFragment.getCurrentMap().getMapUuid()))
                 mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
             else
                 mapFragment.getMapView().getNavigation().stop();
@@ -87,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             IndoorwayObjectParameters room = indoorwayMap.objectWithId(roomId);
             assert room != null;
             String roomName = room.getName();
-            Log.e("jdnfsjfbdsfbhfb", roomName);
+//            Log.e("jdnfsjfbdsfbhfb", roomName);
 
             ((TextView) findViewById(R.id.notification)).setText(roomName);
         }
@@ -106,11 +114,26 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         config.setLocationButtonVisible(false);
         config.setStartPositioningOnResume(true);
         config.setLoadLastKnownMap(true);
+        config.setReloadMapOnPositionChange(false);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         IndoorwayMapFragment fragment = IndoorwayMapFragment.newInstance(this, config);
         fragmentTransaction.add(R.id.fragment_container, fragment, IndoorwayMapFragment.class.getSimpleName());
         fragmentTransaction.commit();
+
+        findViewById(R.id.level_up).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR_UUIDS[currentFloor+1]);
+            }
+        });
+
+        findViewById(R.id.level_down).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR_UUIDS[currentFloor-1]);
+            }
+        });
     }
 
     @Override
@@ -235,6 +258,12 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
                 myLayer = mapFragment.getMapView().getMarker().addLayer(1.0f);
+                for(int i = 0; i < IndoorwayConstants.FLOOR_UUIDS.length; i++)
+                    if(IndoorwayConstants.FLOOR_UUIDS[i].equals(indoorwayMap.getMapUuid()))
+                        currentFloor = i;
+                Log.e(IndoorwayConstants.LOG_TAG, "Current floor is "+currentFloor);
+                findViewById(R.id.level_up).setEnabled(currentFloor < IndoorwayConstants.FLOOR_UUIDS.length-1);
+                findViewById(R.id.level_down).setEnabled(currentFloor > 0);
             }
         });
 
@@ -261,11 +290,9 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
                     selectedObject = parameters.getId();
                     updateRoomDetails();
-                    if (currentPosition != null) {
+                    if (currentPosition != null && currentPosition.getMapUuid().equals(mapFragment.getCurrentMap().getMapUuid())) {
                         mapFragment.getMapView().getNavigation().start(currentPosition, selectedObject);
                     }
-
-//                    setRoomColor(selectedObject, red);
                 }
 
                 @Override

@@ -38,7 +38,7 @@
                 android:background="@color/indoorway_map_default_room_outline"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:text="POWIADOMIENIE"
+                android:text="-"
                 android:textColor="@color/windowBackground"
                 android:textSize="16sp" />
 
