@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    sothree:umanoPanelHeight="68dp"
+    sothree:umanoPanelHeight="88dp"
     sothree:umanoShadowHeight="4dp">
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -80,6 +80,25 @@
         android:focusable="false"
         android:orientation="vertical">
 
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:background="@color/indoorway_map_outdoor_background">
+
+            <TextView
+                android:id="@+id/room_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center"
+                android:text="POKOJ"
+                android:textAlignment="center"
+                android:textColor="@color/windowBackground"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="68dp"
@@ -122,37 +141,37 @@
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:id="@+id/averageTimeText"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="ŚREDNI CZAS"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/windowBackground"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+                    android:paddingRight="10dp">
 
-                <TextView
-                    android:id="@+id/averageTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="16sp"
-                    android:layout_weight="1"
-                    android:text="brak danych"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/windowBackground"
-                    android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/averageTimeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="ŚREDNI CZAS"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/windowBackground"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/averageTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="16sp"
+                        android:layout_weight="1"
+                        android:text="brak danych"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/windowBackground"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
             </LinearLayout>
-
-        </LinearLayout>
 
 
         <com.github.mikephil.charting.charts.BarChart

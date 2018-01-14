@@ -302,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     public void updateRoomDetails() {
         TextView peopleAmount = findViewById(R.id.usersAmount);
         BarChart chart = findViewById(R.id.chart);
+        TextView roomName = findViewById(R.id.room_name);
 
         List<BarEntry> entries = new ArrayList<>();
         for (int i = 7; i < 20; i++) {
@@ -319,6 +320,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         chart.invalidate(); // refresh
 
         peopleAmount.setText(String.valueOf(getPeopleCount(selectedObject)));
+        roomName.setText(mapFragment.getCurrentMap().objectWithId(selectedObject).getName());
     }
 
     private int getPeopleCount(String roomId) {
