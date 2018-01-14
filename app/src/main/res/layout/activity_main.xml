@@ -44,6 +44,30 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingTop="30dp">
+
+
+            <Button
+                android:id="@+id/level_up"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="/\\" />
+
+            <Button
+                android:id="@+id/level_down"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="\\/" />
+        </LinearLayout>
+
     </FrameLayout>
 
     <!-- SLIDING LAYOUT -->
@@ -129,6 +153,12 @@
             </LinearLayout>
 
         </LinearLayout>
+
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
 
         <!--<ScrollView-->
         <!--android:id="@+id/sv"-->

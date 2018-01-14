@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 repositories {
     maven { url 'https://repository.indoorway.com/artifactory/android' }
+    maven { url "https://jitpack.io" }
+
 }
 
 ext {
@@ -48,4 +50,6 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:3.4.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 }

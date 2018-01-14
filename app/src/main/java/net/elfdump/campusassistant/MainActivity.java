@@ -8,6 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
 import com.indoorway.android.common.sdk.model.Coordinates;
@@ -31,6 +39,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -273,6 +282,23 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
     public void updateRoomDetails() {
         TextView peopleAmount = findViewById(R.id.usersAmount);
+        BarChart chart = findViewById(R.id.chart);
+
+        List<BarEntry> entries = new ArrayList<>();
+        for (int i = 7; i < 20; i++) {
+            entries.add(new BarEntry(i, i*2));
+        }
+
+        BarDataSet set = new BarDataSet(entries, "BarDataSet");
+        set.setColor(Color.WHITE);
+
+        BarData data = new BarData(set);
+        data.setValueTextColor(Color.WHITE);
+//        data.setBarWidth(0.6f); // set custom bar width
+        chart.setData(data);
+        chart.setFitBars(true); // make the x-axis fit exactly all bars
+        chart.invalidate(); // refresh
+
         peopleAmount.setText(String.valueOf(getPeopleCount(selectedObject)));
     }
 
