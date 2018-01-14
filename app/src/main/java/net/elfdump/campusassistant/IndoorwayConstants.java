@@ -1,5 +1,8 @@
 package net.elfdump.campusassistant;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.indoorway.android.common.sdk.model.IndoorwayObjectParameters;
 
 public final class IndoorwayConstants {
@@ -14,14 +17,9 @@ public final class IndoorwayConstants {
 
     public static final String LOG_TAG = "CampusAssistant";
 
-    public static final String[] SELECTABLE_ROOMS = {ROOM_213_UUID, ROOM_216_UUID};
-
-    public static boolean isRoom(IndoorwayObjectParameters room) {
-        // TODO: Adikso
-        for (String x : IndoorwayConstants.SELECTABLE_ROOMS) {
-            if (room.getId().equals(x))
-                return true;
-        }
-        return false;
+    public static boolean isRoom(@NonNull IndoorwayObjectParameters room) {
+        Log.e(LOG_TAG, room.getId()+" "+room.getName()+" "+room.getType());
+        assert room.getType() != null;
+        return room.getName() != null && room.getType().equals("room") && !room.getName().contains("Corridor") && !room.getName().contains("Floor") && !room.getName().contains("Parter"); //TODO
     }
 }

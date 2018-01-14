@@ -197,18 +197,21 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             try {
                 peopleCount = MyApplication.getRestClient().location().getPeopleCount().execute().body();
 
-                if (mapFragment.getCurrentMap() == null) {
+                if (mapFragment.getCurrentMap() == null || myLayer == null) {
                     return;
                 }
 
-                for(String room : peopleCount.keySet()) {
-                    Log.i(IndoorwayConstants.LOG_TAG, "Room "+room+": "+peopleCount.get(room));
+                for(IndoorwayObjectParameters room : mapFragment.getCurrentMap().getObjects()) {
+                    if (!IndoorwayConstants.isRoom(room))
+                        continue;
+
+                    Log.i(IndoorwayConstants.LOG_TAG, "Room "+room+": "+getPeopleCount(room.getId()));
 
                     int green = Color.argb(60, 0, 255, 0);
                     int red = Color.argb(60, 255, 0, 0);
 
-                    int amount = peopleCount.get(room);
-                    setRoomColor(room, (amount > 1 ? red : green));
+                    int amount = getPeopleCount(room.getId());
+                    setRoomColor(room.getId(), (amount > 0 ? red : green));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -270,12 +273,17 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
     public void updateRoomDetails() {
         TextView peopleAmount = findViewById(R.id.usersAmount);
-        if (peopleCount.containsKey(selectedObject)) {
-            int amount = peopleCount.get(selectedObject);
-            peopleAmount.setText(String.valueOf(amount));
+        peopleAmount.setText(String.valueOf(getPeopleCount(selectedObject)));
+    }
+
+    private int getPeopleCount(String roomId) {
+        int amount = 0;
+        if (peopleCount.containsKey(roomId)) {
+            amount = peopleCount.get(roomId);
         } else {
-            peopleAmount.setText(R.string.no_information);
+            Log.w(IndoorwayConstants.LOG_TAG, "No data for room: "+roomId);
         }
+        return amount;
     }
 
     public void setRoomColor(String roomId, int color) {
