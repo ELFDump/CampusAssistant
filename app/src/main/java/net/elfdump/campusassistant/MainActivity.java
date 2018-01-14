@@ -27,6 +27,7 @@ import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.map.sdk.listeners.OnObjectSelectedListener;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawablePolygon;
+import com.indoorway.android.map.sdk.view.drawable.figures.DrawableText;
 import com.indoorway.android.map.sdk.view.drawable.layers.MarkersLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -233,7 +234,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                     int red = Color.argb(60, 255, 0, 0);
 
                     int amount = getPeopleCount(room.getId());
-                    setRoomColor(room.getId(), (amount > 0 ? red : green));
+                    int color = Color.argb(60, 50*amount, 255-50*amount, 0);
+                    setRoomColor(room.getId(), color);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
