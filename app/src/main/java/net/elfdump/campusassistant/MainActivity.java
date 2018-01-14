@@ -2,22 +2,16 @@ package net.elfdump.campusassistant;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
 import com.indoorway.android.common.sdk.model.Coordinates;
@@ -31,10 +25,8 @@ import com.indoorway.android.fragments.sdk.map.IndoorwayMapFragment;
 import com.indoorway.android.fragments.sdk.map.MapFragment;
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
 import com.indoorway.android.map.sdk.listeners.OnObjectSelectedListener;
-import com.indoorway.android.map.sdk.view.IndoorwayMapView;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle;
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawablePolygon;
-import com.indoorway.android.map.sdk.view.drawable.figures.DrawableText;
 import com.indoorway.android.map.sdk.view.drawable.layers.MarkersLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -88,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 return;
 
             IndoorwayMap indoorwayMap = mapFragment.getCurrentMap();
-            if (!indoorwayProximityEvent.isForBuildingAndMap(indoorwayMap.getBuildingUuid(), indoorwayMap.getMapUuid()))
+            if (indoorwayMap == null || !indoorwayProximityEvent.isForBuildingAndMap(indoorwayMap.getBuildingUuid(), indoorwayMap.getMapUuid()))
                 return;
 
             String roomId = indoorwayProximityEvent.getIdentifier().split("\\+")[0];

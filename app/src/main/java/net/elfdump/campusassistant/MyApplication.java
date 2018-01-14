@@ -4,13 +4,14 @@ import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
@@ -22,11 +23,14 @@ import com.indoorway.android.common.sdk.model.proximity.IndoorwayProximityEvent;
 import com.indoorway.android.common.sdk.model.proximity.IndoorwayProximityEventShape;
 import com.indoorway.android.common.sdk.task.IndoorwayTask;
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk;
+import com.indoorway.android.location.sdk.background.BackgroundNotificationBuilder;
 import com.indoorway.android.location.sdk.background.StandardBackgroundNotificationBuilder;
 import com.indoorway.android.location.sdk.listeners.OnProximityEventListener;
 
 import net.elfdump.campusassistant.api.RestClient;
 import net.elfdump.campusassistant.api.model.UserPlaceEvent;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Date;
@@ -60,12 +64,15 @@ public class MyApplication extends Application {
             IndoorwayProximityEvent.Trigger trigger = proximityEvent.getTrigger();
             String roomId = proximityEvent.getIdentifier().split("\\+")[0];
 
-            Notification notification = new NotificationCompat.Builder(MyApplication.this)
+            PendingIntent contentIntent = PendingIntent.getActivity(MyApplication.this, 0,
+                new Intent(MyApplication.this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Notification notification = new NotificationCompat.Builder(MyApplication.this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Proximity event triggered!")
                 .setContentText(roomId + " " + trigger.toString())
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(proximityEvent.toString()))
-                .setChannelId(NOTIFICATION_CHANNEL_ID)
+                .setContentIntent(contentIntent)
                 .build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(
                 NOTIFICATION_SERVICE);
@@ -79,6 +86,22 @@ public class MyApplication extends Application {
             new SendUserPlaceEvent().execute(restEvent);
         }
     };
+
+    public class MyBackgroundNotificationBuilder implements BackgroundNotificationBuilder {
+        @NotNull
+        @Override
+        public Notification buildNotificationForService(Context context) {
+            PendingIntent contentIntent = PendingIntent.getActivity(MyApplication.this, 0,
+                new Intent(MyApplication.this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+            return new NotificationCompat.Builder(MyApplication.this, RUNNING_NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("CampusAssistant")
+                .setContentText("CampusAssistant jest aktywny!")
+                .setContentIntent(contentIntent)
+                .build();
+        }
+    }
 
     @Override
     public void onCreate() {
@@ -100,13 +123,19 @@ public class MyApplication extends Application {
             NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "CampusAssistant: notifications", NotificationManager.IMPORTANCE_HIGH); // TODO: wysoka dla testów
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "CampusAssistant: notifications", NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("Powiadomienia o wchodzeniu/wychodzeniu [DEBUG]");
             channel.enableLights(true);
             channel.setLightColor(Color.RED);
             channel.enableVibration(true);
             channel.setVibrationPattern(new long[]{ 100, 100, 100, 100, 100, 500 });
             notificationManager.createNotificationChannel(channel);
+
+            NotificationChannel channel2 = new NotificationChannel(RUNNING_NOTIFICATION_CHANNEL_ID, "CampusAssistant: activity", NotificationManager.IMPORTANCE_MIN);
+            channel2.setDescription("Powiadomienia o działaniu aplikacji");
+            channel2.enableLights(false);
+            channel2.enableVibration(false);
+            notificationManager.createNotificationChannel(channel2);
         }
 
         StandardBackgroundNotificationBuilder notificationBuilder = new StandardBackgroundNotificationBuilder(
@@ -116,7 +145,7 @@ public class MyApplication extends Application {
             "CampusAssistant is running!",
             R.drawable.ic_launcher_foreground
         );
-        IndoorwayLocationSdk.background().enable(notificationBuilder);
+        IndoorwayLocationSdk.background().enable(new MyBackgroundNotificationBuilder());
 
         IndoorwayLocationSdk.background().setCustomProximityEventListener(proximityEventListener);
 
