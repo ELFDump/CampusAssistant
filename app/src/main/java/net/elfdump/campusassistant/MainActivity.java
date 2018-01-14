@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             IndoorwayObjectParameters room = indoorwayMap.objectWithId(roomId);
             assert room != null;
             String roomName = room.getName();
-//            Log.e("jdnfsjfbdsfbhfb", roomName);
 
             ((TextView) findViewById(R.id.notification)).setText(roomName);
         }
@@ -177,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 .setOnCompletedListener(new Action1<List<VisitorLocation>>() {
                     @Override
                     public void onAction(List<VisitorLocation> visitorLocations) {
-//                        Log.i(IndoorwayConstants.LOG_TAG, "WORKING");
                         IndoorwayMap indoorwayMap = mapFragment.getCurrentMap();
                         assert indoorwayMap != null;
                         for (VisitorLocation visitor : visitorLocations) {
@@ -192,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                             if (new Date().getTime() - visitor.getTimestamp().getTime() > 10000)
                                 continue; // za stare
 
-//                            Log.i(IndoorwayConstants.LOG_TAG, visitor.toString());
                             markersLayer.add(
                                 new DrawableCircle(
                                     visitor.getVisitorUuid(),
