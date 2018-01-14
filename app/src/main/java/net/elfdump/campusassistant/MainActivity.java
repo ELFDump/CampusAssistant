@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                                     visitor.getVisitorUuid(),
                                     .5f, // radius in meters, eg. 0.4f
                                     Color.RED, // circle background color, eg. Color.RED
-                                    Color.BLUE, // color of outline, eg. Color.BLUE
+                                    0, // color of outline, eg. Color.BLUE
                                     .1f, // width of outline in meters, eg. 0.1f
                                     new Coordinates(visitor.getLat(), visitor.getLon()) // coordinates of circle center point
                                 )
