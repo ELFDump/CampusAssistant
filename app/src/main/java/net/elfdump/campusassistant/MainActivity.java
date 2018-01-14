@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -305,9 +306,16 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         BarChart chart = findViewById(R.id.chart);
         TextView roomName = findViewById(R.id.room_name);
 
+        Random rand = new Random(selectedObject.hashCode());
         List<BarEntry> entries = new ArrayList<>();
-        for (int i = 7; i < 20; i++) {
-            entries.add(new BarEntry(i, i * 2));
+        for (int i = 6; i < 22; i++) {
+            entries.add(new BarEntry(i, 0));
+        }
+        for (int i = 0; i < 250; i++) {
+            int x = (int)(rand.nextGaussian()*(entries.size()/8)+(entries.size()/2));
+            x = Math.min(Math.max(x, 0), entries.size()-1);
+            BarEntry e = entries.get(x);
+            e.setY(e.getY()+1);
         }
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
