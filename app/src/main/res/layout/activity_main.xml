@@ -26,21 +26,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/indoorway_inaccessible_color"
-            android:orientation="horizontal">
+            android:background="@color/indoorway_map_default_room_outline"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
 
             <TextView
                 android:id="@+id/notification"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/indoorway_map_default_room_outline"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:paddingBottom="5dp"
                 android:text="-"
                 android:textColor="@color/windowBackground"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/floorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingRight="10dp"
+                android:text="Floor"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -48,6 +59,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:layout_weight="1"
             android:gravity="bottom"
             android:orientation="vertical"
@@ -59,14 +71,18 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="▲" />
+                android:background="@color/indoorway_map_indoor_background"
+                android:text="▲"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/level_down"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="▼" />
+                android:background="@color/indoorway_map_indoor_background"
+                android:text="▼"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </FrameLayout>

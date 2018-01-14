@@ -37,6 +37,7 @@ import com.indoorway.android.map.sdk.view.drawable.layers.MarkersLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+/*
+    HIGH QUALITY LEGIT CODE
+ */
 
 public class MainActivity extends AppCompatActivity implements IndoorwayMapFragment.OnMapFragmentReadyListener {
     private MapFragment mapFragment;
@@ -124,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             @Override
             public void onClick(View view) {
                 mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR_UUIDS[currentFloor + 1]);
+                changeFloorText(currentFloor + 1);
             }
         });
 
@@ -131,8 +137,20 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             @Override
             public void onClick(View view) {
                 mapFragment.getMapView().load(IndoorwayConstants.BUILDING_UUID, IndoorwayConstants.FLOOR_UUIDS[currentFloor - 1]);
+                changeFloorText(currentFloor - 1);
             }
         });
+    }
+
+    void changeFloorText(int floor) {
+        TextView textView = findViewById(R.id.floorName);
+
+        if (floor == 0) {
+            textView.setText("Parter");
+        } else {
+            textView.setText(String.format("%d piętro", floor));
+        }
+
     }
 
     @Override
@@ -263,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                 Log.e(IndoorwayConstants.LOG_TAG, "Current floor is " + currentFloor);
                 findViewById(R.id.level_up).setEnabled(currentFloor < IndoorwayConstants.FLOOR_UUIDS.length - 1);
                 findViewById(R.id.level_down).setEnabled(currentFloor > 0);
+                changeFloorText(currentFloor);
             }
         });
 
