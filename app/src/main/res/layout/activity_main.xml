@@ -81,7 +81,7 @@
         android:focusable="false"
         android:orientation="vertical">
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -100,7 +100,6 @@
                 android:textColor="@color/windowBackground"
                 android:textSize="16sp" />
         </FrameLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -176,11 +175,23 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Statystyki odwiedzin"
+            android:textAlignment="center"
+            android:textColor="@color/windowBackground" />
+
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="200dp"
+            android:padding="10dp">
+
+        </com.github.mikephil.charting.charts.BarChart>
 
         <!--<ScrollView-->
         <!--android:id="@+id/sv"-->

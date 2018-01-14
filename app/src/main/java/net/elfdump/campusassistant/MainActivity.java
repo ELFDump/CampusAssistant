@@ -9,9 +9,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.indoorway.android.common.sdk.IndoorwaySdk;
 import com.indoorway.android.common.sdk.listeners.generic.Action1;
 import com.indoorway.android.common.sdk.model.Coordinates;
@@ -323,6 +328,21 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
         BarData data = new BarData(set);
         data.setValueTextColor(Color.WHITE);
+        chart.getLegend().setEnabled(false);
+        chart.getXAxis().setTextColor(Color.WHITE);
+        chart.getXAxis().setLabelCount(12);
+
+        data.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return String.valueOf((int)value);
+            }
+        });
+
+        chart.setDescription(null);
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisRight().setEnabled(false);
+
 //        data.setBarWidth(0.6f); // set custom bar width
         chart.setData(data);
         chart.setFitBars(true); // make the x-axis fit exactly all bars
