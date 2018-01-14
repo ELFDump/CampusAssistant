@@ -42,7 +42,8 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements IndoorwayMapFragment.OnMapFragmentReadyListener {
     private MapFragment mapFragment;
-    private MarkersLayer myLayer;
+    private MarkersLayer markersLayer;
+    private MarkersLayer roomsLayer;
 
     private IndoorwayPosition currentPosition;
     private String selectedObject;
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
     private class UpdateVisitorIcons extends TimerTask {
         @Override
         public void run() {
-            if (myLayer == null)
+            if (markersLayer == null)
                 return;
 
             IndoorwaySdk.instance()
@@ -186,13 +187,13 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
                             if (!visitor.getBuildingUuid().equals(indoorwayMap.getBuildingUuid()) || !visitor.getMapUuid().equals(indoorwayMap.getMapUuid()))
                                 continue; // złe piętro
 
-                            myLayer.remove(visitor.getVisitorUuid());
+                            markersLayer.remove(visitor.getVisitorUuid());
 
                             if (new Date().getTime() - visitor.getTimestamp().getTime() > 10000)
                                 continue; // za stare
 
 //                            Log.i(IndoorwayConstants.LOG_TAG, visitor.toString());
-                            myLayer.add(
+                            markersLayer.add(
                                 new DrawableCircle(
                                     visitor.getVisitorUuid(),
                                     .5f, // radius in meters, eg. 0.4f
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
             try {
                 peopleCount = MyApplication.getRestClient().location().getPeopleCount().execute().body();
 
-                if (mapFragment.getCurrentMap() == null || myLayer == null) {
+                if (mapFragment.getCurrentMap() == null || roomsLayer == null) {
                     return;
                 }
 
@@ -249,7 +250,8 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         mapFragment.getMapView().setOnMapLoadCompletedListener(new Action1<IndoorwayMap>() {
             @Override
             public void onAction(IndoorwayMap indoorwayMap) {
-                myLayer = mapFragment.getMapView().getMarker().addLayer(1.0f);
+                markersLayer = mapFragment.getMapView().getMarker().addLayer(100.0f);
+                roomsLayer = mapFragment.getMapView().getMarker().addLayer(1.0f);
                 for (int i = 0; i < IndoorwayConstants.FLOOR_UUIDS.length; i++)
                     if (IndoorwayConstants.FLOOR_UUIDS[i].equals(indoorwayMap.getMapUuid()))
                         currentFloor = i;
@@ -339,8 +341,7 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
         IndoorwayObjectParameters originalRoom = mapFragment.getCurrentMap().objectWithId(roomId);
 
         if (originalRoom != null) {
-            myLayer.add(new DrawablePolygon(roomId + "Overlay", originalRoom.getCoordinates(), color));
+            roomsLayer.add(new DrawablePolygon(roomId + "Overlay", originalRoom.getCoordinates(), color));
         }
-
     }
 }
