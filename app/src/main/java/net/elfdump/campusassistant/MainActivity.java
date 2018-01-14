@@ -254,9 +254,6 @@ public class MainActivity extends AppCompatActivity implements IndoorwayMapFragm
 
                     Log.i(IndoorwayConstants.LOG_TAG, "Room " + room + ": " + getPeopleCount(room.getId()));
 
-                    int green = Color.argb(60, 0, 255, 0);
-                    int red = Color.argb(60, 255, 0, 0);
-
                     int amount = getPeopleCount(room.getId());
                     int color = Color.argb(60, 50*amount, 255-50*amount, 0);
                     setRoomColor(room.getId(), color);
